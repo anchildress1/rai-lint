@@ -25,7 +25,7 @@ jobs:
       python_tag_name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
 
     steps:
-      - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -62,7 +62,7 @@ jobs:
           zip -j artifacts/commitlint-test-results.zip packages/node-commitlint/reports/lcov.info packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Upload Node test results zip
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: commitlint-test-results
           path: artifacts/commitlint-test-results.zip
@@ -73,7 +73,7 @@ jobs:
           python-version: "3.12"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@6ee6290f1cbc4156c0bdd66691b2c144ef8df19a # v7.4.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           enable-cache: true
 
@@ -97,7 +97,7 @@ jobs:
           zip -j ../../artifacts/gitlint-test-results.zip reports/coverage.xml reports/junit-py.xml
 
       - name: Upload Python test results zip
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: gitlint-test-results
           path: artifacts/gitlint-test-results.zip
@@ -196,7 +196,7 @@ jobs:
           python-version: "3.12"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@6ee6290f1cbc4156c0bdd66691b2c144ef8df19a # v7.4.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           enable-cache: true
 
@@ -238,7 +238,7 @@ jobs:
 
       - name: Publish to PyPI with Trusted Publishing
         id: publish
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
