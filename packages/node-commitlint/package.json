@@ -60,7 +60,7 @@
     }
   },
   "devDependencies": {
-    "@commitlint/types": "^20.0.0",
+    "@commitlint/types": "^21.0.1",
     "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^4.1.0",
     "typescript": "^6.0.3",
