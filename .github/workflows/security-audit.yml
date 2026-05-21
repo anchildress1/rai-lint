@@ -30,7 +30,7 @@ jobs:
           persist-credentials: false
 
       - name: "Run Trivy analysis"
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # 0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # 0.36.0
         with:
           scan-type: "repo"
           scan-ref: "."
@@ -48,7 +48,7 @@ jobs:
           retention-days: 30
 
       - name: "Upload to code-scanning"
-        uses: github/codeql-action/upload-sarif@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
+        uses: github/codeql-action/upload-sarif@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
         with:
           sarif_file: results.sarif
 
@@ -67,7 +67,7 @@ jobs:
         run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6.3.0
+        uses: actions/setup-node@v6.4.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
 
@@ -133,7 +133,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Initialize CodeQL"
-        uses: github/codeql-action/init@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
+        uses: github/codeql-action/init@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
         with:
           languages: ${{ matrix.language }}
           packs: codeql/actions-queries
@@ -145,4 +145,4 @@ jobs:
           npm run build --if-present
 
       - name: "Perform CodeQL Analysis"
-        uses: github/codeql-action/analyze@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
+        uses: github/codeql-action/analyze@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5

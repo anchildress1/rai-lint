@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v6.0.2
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6.3.0
+        uses: actions/setup-node@v6.4.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
@@ -53,7 +53,7 @@ jobs:
         run: npm test --workspace=packages/node-commitlint
 
       - name: Upload Node coverage and test results to Codecov
-        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
+        uses: codecov/codecov-action@e79a6962e0d4c0c17b229090214935d2e33f8354 # v6.0.1
         env:
           CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
@@ -122,7 +122,7 @@ jobs:
           retention-days: 30
 
       - name: Upload Python coverage and test results to Codecov
-        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
+        uses: codecov/codecov-action@e79a6962e0d4c0c17b229090214935d2e33f8354 # v6.0.1
         env:
           CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
@@ -155,7 +155,7 @@ jobs:
 
       - name: Dependency Review
         if: steps.changed.outputs.any_changed == 'true'
-        uses: actions/dependency-review-action@v4.9.0
+        uses: actions/dependency-review-action@v5.0.0
         with:
           fail-on-severity: moderate
           comment-summary-in-pr: on-failure
@@ -189,6 +189,6 @@ jobs:
           merge-multiple: true
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@299e4b793aaa83bf2aba7c9c14bedbb485688ec4 # v7.1.0
+        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
