@@ -61,10 +61,10 @@
   },
   "devDependencies": {
     "@commitlint/types": "^21.0.1",
-    "@types/node": "^25.9.0",
+    "@types/node": "^25.9.1",
     "@vitest/coverage-v8": "^4.1.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.8"
   },
   "volta": {
     "node": "24.11.1"
