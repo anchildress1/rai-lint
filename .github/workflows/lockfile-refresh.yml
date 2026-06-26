@@ -24,7 +24,7 @@ jobs:
         if: >
           (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
           ||
-          (github.event_name == 'workflow_dispatch' && github.actor == 'anchildress1')
+          (github.event_name == 'workflow_dispatch')
 
         steps:
             - name: Find open release-please branch
@@ -72,7 +72,7 @@ jobs:
             (
               (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
               ||
-              (github.event_name == 'workflow_dispatch' && github.actor == 'anchildress1')
+              (github.event_name == 'workflow_dispatch')
             )
             &&
             (needs.resolve-release-please-branch.outputs.ref != '')
@@ -128,7 +128,7 @@ jobs:
             (
               (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
               ||
-              (github.event_name == 'workflow_dispatch' && github.actor == 'anchildress1')
+              (github.event_name == 'workflow_dispatch')
             )
             &&
             (needs.resolve-release-please-branch.outputs.ref != '')

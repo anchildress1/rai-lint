@@ -99,8 +99,8 @@ jobs:
       - name: Run Black and isort
         working-directory: packages/python-gitlint
         run: |
-          uv run black --check gitlint_rai tests/
-          uv run isort --check-only gitlint_rai tests/
+          uv run --frozen black --check gitlint_rai tests/
+          uv run --frozen isort --check-only gitlint_rai tests/
 
       - name: Create reports directory
         working-directory: packages/python-gitlint
@@ -109,7 +109,7 @@ jobs:
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
         run: |
-          uv run pytest \
+          uv run --frozen pytest \
             --cov \
             --cov-report=xml \
             --cov-report=term-missing

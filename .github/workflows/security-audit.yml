@@ -82,18 +82,18 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          uv sync --no-dev --directory packages/python-gitlint/
+          uv sync --frozen --no-dev --directory packages/python-gitlint/
 
       - name: Check Node licenses
         run: |
-          npx --yes license-checker --json --excludePrivatePackages --production --start packages/node-commitlint > node-licenses.json
+          npx --yes --ignore-scripts license-checker@25.0.1 --json --excludePrivatePackages --production --start packages/node-commitlint > node-licenses.json
           python3 .github/scripts/check-licenses.py node-licenses.json
 
       - name: Generate Python SBOM
         working-directory: packages/python-gitlint
         run: |
           mkdir -p reports
-          uvx --from cyclonedx-bom==7.1.0 cyclonedx-py environment \
+          uvx --no-build --from cyclonedx-bom==7.1.0 cyclonedx-py environment \
             .venv/bin/python3 \
             --mc-type library \
             --output-reproducible \
