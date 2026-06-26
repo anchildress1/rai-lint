@@ -1,11 +1,11 @@
 import type { Rule } from '@commitlint/types';
 
 const AI_ATTRIBUTION_PATTERNS = [
-  /^Authored-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Commit-generated-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Assisted-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Co-authored-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Generated-by:\s+[^<]+\s+<[^>]+>$/im,
+  /^Authored-by:[^<]+<[^>]+>$/im,
+  /^Commit-generated-by:[^<]+<[^>]+>$/im,
+  /^Assisted-by:[^<]+<[^>]+>$/im,
+  /^Co-authored-by:[^<]+<[^>]+>$/im,
+  /^Generated-by:[^<]+<[^>]+>$/im,
 ];
 
 const raiFooterExists: Rule = (parsed) => {
