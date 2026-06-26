@@ -93,6 +93,33 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(true);
   });
 
+  it('should fail when the attribution name is missing', async () => {
+    const parsed = {
+      raw: 'feat: add feature\n\nGenerated-by: <ai@example.com>',
+    } as any;
+
+    const [isValid] = await raiFooterExists(parsed);
+    expect(isValid).toBe(false);
+  });
+
+  it('should fail without whitespace before the email', async () => {
+    const parsed = {
+      raw: 'feat: add feature\n\nGenerated-by: AI<ai@example.com>',
+    } as any;
+
+    const [isValid] = await raiFooterExists(parsed);
+    expect(isValid).toBe(false);
+  });
+
+  it('should not match an attribution spanning multiple lines', async () => {
+    const parsed = {
+      raw: 'feat: add feature\n\nGenerated-by: GitHub Copilot\n<copilot@github.com>',
+    } as any;
+
+    const [isValid] = await raiFooterExists(parsed);
+    expect(isValid).toBe(false);
+  });
+
   it('should fail when commit message is empty', async () => {
     const parsedEmpty = {} as any;
     const [isValidEmpty, messageEmpty] = await raiFooterExists(parsedEmpty);

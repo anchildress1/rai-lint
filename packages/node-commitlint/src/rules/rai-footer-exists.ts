@@ -1,11 +1,16 @@
 import type { Rule } from '@commitlint/types';
 
+// Each pattern requires a non-empty attribution name and a whitespace
+// separator before `<email>`, mirroring the Python rule's `^[^<]+ <[^>]+>$`.
+// `\r\n` are excluded from the name/email runs so a footer cannot match
+// across lines, and no two adjacent quantifiers share a character class,
+// keeping evaluation linear (no ReDoS backtracking).
 const AI_ATTRIBUTION_PATTERNS = [
-  /^Authored-by:[^<]+<[^>]+>$/im,
-  /^Commit-generated-by:[^<]+<[^>]+>$/im,
-  /^Assisted-by:[^<]+<[^>]+>$/im,
-  /^Co-authored-by:[^<]+<[^>]+>$/im,
-  /^Generated-by:[^<]+<[^>]+>$/im,
+  /^Authored-by:[^\S\r\n]*[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Commit-generated-by:[^\S\r\n]*[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Assisted-by:[^\S\r\n]*[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Co-authored-by:[^\S\r\n]*[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Generated-by:[^\S\r\n]*[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
 ];
 
 const raiFooterExists: Rule = (parsed) => {
