@@ -1,11 +1,17 @@
 import type { Rule } from '@commitlint/types';
 
+// Each pattern requires `Key: Value` spacing (whitespace after the colon),
+// a non-empty attribution name, and a whitespace separator before `<email>`,
+// matching the documented footer format and the rule's own examples.
+// `\r\n` are excluded from the name/email runs so a footer cannot match
+// across lines, and no two adjacent quantifiers share a character class,
+// keeping evaluation linear (no ReDoS backtracking).
 const AI_ATTRIBUTION_PATTERNS = [
-  /^Authored-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Commit-generated-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Assisted-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Co-authored-by:\s+[^<]+\s+<[^>]+>$/im,
-  /^Generated-by:\s+[^<]+\s+<[^>]+>$/im,
+  /^Authored-by:[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Commit-generated-by:[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Assisted-by:[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Co-authored-by:[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
+  /^Generated-by:[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>$/im,
 ];
 
 const raiFooterExists: Rule = (parsed) => {
