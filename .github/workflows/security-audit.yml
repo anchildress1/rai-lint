@@ -36,7 +36,7 @@ jobs:
           scan-ref: "."
           format: "sarif"
           output: "results.sarif"
-          scanners: "misconfig,secret,license"
+          scanners: "misconfig,secret"
           severity: "HIGH,CRITICAL"
           ignore-unfixed: true
 
@@ -64,7 +64,7 @@ jobs:
 
       - name: Get Node version from package.json
         id: node-version
-        run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
+        run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v6.4.0

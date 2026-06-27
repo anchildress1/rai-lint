@@ -76,6 +76,8 @@ jobs:
             )
             &&
             (needs.resolve-release-please-branch.outputs.ref != '')
+            &&
+            startsWith(needs.resolve-release-please-branch.outputs.ref, 'release-please--')
           )
 
         steps:
@@ -83,6 +85,7 @@ jobs:
               uses: actions/checkout@v7.0.0
               with:
                   ref: ${{ needs.resolve-release-please-branch.outputs.ref }}
+                  persist-credentials: false
 
             - name: Pull latest changes
               run: git pull
@@ -105,14 +108,23 @@ jobs:
             - name: Refresh npm lockfiles (root)
               run: npm install --ignore-scripts --package-lock-only
 
-            - name: Auto-commit npm lockfiles
-              uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
-              with:
-                  commit_message: "chore: refresh npm lockfiles"
-                  file_pattern: package-lock.json
-                  commit_user_name: github-actions[bot]
-                  commit_user_email: github-actions[bot]@users.noreply.github.com
-                  commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+            # persist-credentials is false on checkout (untrusted-checkout hardening),
+            # so push explicitly with a scoped token instead of git-auto-commit-action.
+            - name: Commit and push refreshed npm lockfiles
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  REF: ${{ needs.resolve-release-please-branch.outputs.ref }}
+              run: |
+                  set -euo pipefail
+                  if git diff --quiet -- package-lock.json; then
+                    echo "No npm lockfile changes to commit."
+                    exit 0
+                  fi
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add package-lock.json
+                  git commit -m "chore: refresh npm lockfiles"
+                  git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${REF}"
 
     refresh-uv-lockfile:
         name: Refresh uv.lock
@@ -132,6 +144,8 @@ jobs:
             )
             &&
             (needs.resolve-release-please-branch.outputs.ref != '')
+            &&
+            startsWith(needs.resolve-release-please-branch.outputs.ref, 'release-please--')
           )
 
         steps:
@@ -139,6 +153,7 @@ jobs:
               uses: actions/checkout@v7.0.0
               with:
                   ref: ${{ needs.resolve-release-please-branch.outputs.ref }}
+                  persist-credentials: false
 
             - name: Pull latest changes
               run: git pull
@@ -162,11 +177,20 @@ jobs:
               working-directory: packages/python-gitlint
               run: uv lock
 
-            - name: Auto-commit uv.lock
-              uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
-              with:
-                  commit_message: "chore: refresh uv.lock"
-                  file_pattern: packages/python-gitlint/uv.lock
-                  commit_user_name: github-actions[bot]
-                  commit_user_email: github-actions[bot]@users.noreply.github.com
-                  commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+            # persist-credentials is false on checkout (untrusted-checkout hardening),
+            # so push explicitly with a scoped token instead of git-auto-commit-action.
+            - name: Commit and push refreshed uv.lock
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  REF: ${{ needs.resolve-release-please-branch.outputs.ref }}
+              run: |
+                  set -euo pipefail
+                  if git diff --quiet -- packages/python-gitlint/uv.lock; then
+                    echo "No uv.lock changes to commit."
+                    exit 0
+                  fi
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add packages/python-gitlint/uv.lock
+                  git commit -m "chore: refresh uv.lock"
+                  git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${REF}"
