@@ -10,7 +10,7 @@ authors = [
 ]
 readme = "README.md"
 description = "Gitlint plugin for RAI footer validation"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.11,<3.14"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
 dependencies = ["gitlint>=0.19.1"]
 license = "LicenseRef-PolyForm-Shield-1.0.0"
@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: Software Development :: Version Control :: Git",
     "Typing :: Typed",
@@ -98,7 +99,7 @@ testpaths = ["tests"]
 
 [tool.black]
 line-length = 100
-target-version = ['py311', 'py312']
+target-version = ['py311', 'py312', 'py313']
 
 [tool.isort]
 profile = "black"
