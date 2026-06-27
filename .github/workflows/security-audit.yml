@@ -82,7 +82,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          uv sync --frozen --no-dev --directory packages/python-gitlint/
+          uv sync --locked --no-dev --directory packages/python-gitlint/
 
       - name: Check Node licenses
         run: |
