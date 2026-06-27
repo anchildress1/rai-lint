@@ -102,6 +102,15 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(false);
   });
 
+  it('should fail without whitespace after the colon', async () => {
+    const parsed = {
+      raw: 'feat: add feature\n\nGenerated-by:AI <ai@example.com>',
+    } as any;
+
+    const [isValid] = await raiFooterExists(parsed);
+    expect(isValid).toBe(false);
+  });
+
   it('should fail without whitespace before the email', async () => {
     const parsed = {
       raw: 'feat: add feature\n\nGenerated-by: AI<ai@example.com>',
