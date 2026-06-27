@@ -9,7 +9,7 @@
 
 ### Node.js Projects
 
-- Node.js >= 20.0.0, < 25.0.0
+- Node.js >= 20.0.0, < 27.0.0
 - npm or yarn
 - A Git repository (obviously)
 
