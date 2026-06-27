@@ -20,7 +20,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=20 <25"
+    "node": ">=20 <27"
   },
   "scripts": {
     "test": "vitest run --coverage",

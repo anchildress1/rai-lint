@@ -7,7 +7,7 @@
     "packages/node-commitlint"
   ],
   "engines": {
-    "node": ">=20 <25"
+    "node": ">=20 <27"
   },
   "scripts": {
     "test": "npm run test --workspaces",
@@ -17,7 +17,7 @@
     "postinstall": "node --input-type=module -e \"import pkg from './package.json' with { type: 'json' }; process.exit(pkg.private ? 0 : 1);\" && npx lefthook install || true"
   },
   "devDependencies": {
-    "@checkmarkdevtools/commitlint-plugin-rai": "^0.0.0",
+    "@checkmarkdevtools/commitlint-plugin-rai": "^0.1.6",
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "@eslint/js": "^10.0.1",
