@@ -1,9 +1,9 @@
-# @checkmarkdevtools/commitlint-plugin-rai
+# commitlint-plugin-rai
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/ChecKMarKDevTools/admin-things/main/assets/logos/checkmark-rai-lint-logo.png"
-    alt="ChecKMarK RAI"
+    src="https://raw.githubusercontent.com/anchildress1/admin-things/main/assets/logos/checkmark-rai-lint-logo.png"
+    alt="RAI Lint"
     width="160"
   />
 </p>
@@ -20,7 +20,7 @@
 ## Installation 🔧
 
 ```bash
-npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
+npm install --save-dev commitlint-plugin-rai
 ```
 
 ## Usage 🚦
@@ -30,7 +30,7 @@ Add the plugin to your `commitlint.config.js`:
 ```js
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
+  plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
   },

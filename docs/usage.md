@@ -2,7 +2,7 @@
 
 ## What This Actually Does
 
-CheckMarK RAI Lint enforces AI attribution in Git commit trailers. No attribution footer = rejected commit. Simple.
+RAI Lint enforces AI attribution in Git commit trailers. No attribution footer = rejected commit. Simple.
 
 **Read the full context**: [Did AI Erase Attribution? Your Git History Is Missing a Co-Author](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l)
 

@@ -2,8 +2,8 @@
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/ChecKMarKDevTools/admin-things/main/assets/logos/checkmark-rai-lint-logo.png"
-    alt="ChecKMarK RAI"
+    src="https://raw.githubusercontent.com/anchildress1/admin-things/main/assets/logos/checkmark-rai-lint-logo.png"
+    alt="RAI Lint"
     width="160"
   />
 </p>

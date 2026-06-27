@@ -16,7 +16,7 @@ Found a security hole? **Don't tweet about it.**
 If you find a vulnerability that lets someone bypass the AI attribution checks or inject malicious code via the plugins:
 
 1. **Do not open a GitHub issue.** That just tells the bad guys where the keys are.
-2. Email me directly at `human@checkmarkdevtools.dev`.
+2. Email me directly at `anchildress1@gmail.com`.
 3. Give me a chance to fix it before you go full "hacker news" on me.
 
 ### What qualifies?

@@ -1,5 +1,5 @@
 {
-  "name": "@checkmarkdevtools/commitlint-plugin-rai",
+  "name": "commitlint-plugin-rai",
   "version": "0.1.6",
   "description": "Commitlint plugin for RAI footer validation",
   "type": "module",
@@ -40,13 +40,13 @@
   "license": "LicenseRef-PolyForm-Shield-1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ChecKMarKDevTools/rai-lint.git",
+    "url": "https://github.com/anchildress1/rai-lint.git",
     "directory": "packages/node-commitlint"
   },
   "bugs": {
-    "url": "https://github.com/ChecKMarKDevTools/rai-lint/issues"
+    "url": "https://github.com/anchildress1/rai-lint/issues"
   },
-  "homepage": "https://github.com/ChecKMarKDevTools/rai-lint#readme",
+  "homepage": "https://github.com/anchildress1/rai-lint#readme",
   "peerDependencies": {
     "@commitlint/lint": "^19.0.0 || ^20.0.0",
     "@commitlint/types": "^19.0.0 || ^20.0.0"

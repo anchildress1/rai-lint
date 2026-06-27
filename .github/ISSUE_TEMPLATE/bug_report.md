@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug in CheckMarK RAI Lint
+about: Report a bug in RAI Lint
 title: '[Bug]: '
 labels: bug
 assignees: ''
@@ -14,7 +14,7 @@ A clear and concise description of the bug.
 
 **Package**:
 
-- [ ] Node.js (@checkmarkdevtools/commitlint-plugin-rai)
+- [ ] Node.js (commitlint-plugin-rai)
 - [ ] Python (gitlint-rai)
 
 **Version**:

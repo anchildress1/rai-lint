@@ -1,6 +1,6 @@
 <div align="center">
 
-![CheckMarK RAI Lint Banner](docs/assets/rai-lint-banner.png)
+![RAI Lint Banner](docs/assets/rai-lint-banner.png)
 
 **Stop playing hide-and-seek with AI in your commits.**
 
@@ -10,7 +10,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📊 Project Stats
 
-[![GitHub Repo Stars](https://img.shields.io/github/stars/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/issues) [![GitHub Release](https://img.shields.io/github/v/release/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=EDC531)](https://github.com/ChecKMarKDevTools/rai-lint/releases) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/anchildress1/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/anchildress1/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/issues) [![GitHub Release](https://img.shields.io/github/v/release/anchildress1/rai-lint?style=for-the-badge&color=EDC531)](https://github.com/anchildress1/rai-lint/releases) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE)
 
 [![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/checkmarkdevtools_rai-lint?color=brightgreen&server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&color=orange&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint)
 
@@ -20,7 +20,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📦 Packages
 
-[![NPM Version](https://img.shields.io/npm/v/@checkmarkdevtools/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/@checkmarkdevtools/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/gitlint-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/gitlint-rai/)
+[![NPM Version](https://img.shields.io/npm/v/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/gitlint-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/gitlint-rai/)
 
 ### 🤖 AI & Automation
 
@@ -42,7 +42,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ## What is this? 🤖
 
-CheckMarK RAI Lint enforces **Responsible AI (RAI) attribution** in every commit. No more "who wrote this?" moments. No more mystery code. Just honest, trackable AI contributions.
+RAI Lint enforces **Responsible AI (RAI) attribution** in every commit. No more "who wrote this?" moments. No more mystery code. Just honest, trackable AI contributions.
 
 **Read the full story:** [Did AI Erase Attribution? Your Git History Is Missing a Co-Author](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l)
 
@@ -163,7 +163,7 @@ Format: `Signed-off-by: Your Name <your.email@example.com>`
 ### Node.js / Commitlint
 
 ```bash
-npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
+npm install --save-dev commitlint-plugin-rai
 ```
 
 **Configure in `commitlint.config.js`:**
@@ -171,7 +171,7 @@ npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
 ```javascript
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
+  plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
     'signed-off-by-exists': [2, 'always'],

@@ -1,6 +1,6 @@
 # Architecture Overview
 
-CheckMarK RAI Lint is a dual-language monorepo implementing identical commit validation logic across Node.js and Python ecosystems.
+RAI Lint is a dual-language monorepo implementing identical commit validation logic across Node.js and Python ecosystems.
 
 ```mermaid
 %%{init: {'theme':'dark'}}%%

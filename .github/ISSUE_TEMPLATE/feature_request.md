@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest a new feature for CheckMarK RAI Lint
+about: Suggest a new feature for RAI Lint
 title: '[Feature]: '
 labels: enhancement
 assignees: ''
@@ -26,7 +26,7 @@ What alternative solutions or features have you considered?
 
 Which package(s) should this feature be added to?
 
-- [ ] Node.js (@checkmarkdevtools/commitlint-plugin-rai)
+- [ ] Node.js (commitlint-plugin-rai)
 - [ ] Python (gitlint-rai)
 - [ ] Both packages
 - [ ] Documentation

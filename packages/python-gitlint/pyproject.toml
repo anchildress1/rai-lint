@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "gitlint-rai"
 dynamic = ["version"]
 authors = [
-  { name="Ashley Childress", email="human@checkmarkdevtools.dev" },
+  { name="Ashley Childress", email="anchildress1@gmail.com" },
 ]
 readme = "README.md"
 description = "Gitlint plugin for RAI footer validation"
@@ -32,9 +32,9 @@ classifiers = [
 version = {attr = "gitlint_rai.version.__version__"}
 
 [project.urls]
-Homepage = "https://github.com/ChecKMarKDevTools/rai-lint"
-Repository = "https://github.com/ChecKMarKDevTools/rai-lint"
-Issues = "https://github.com/ChecKMarKDevTools/rai-lint/issues"
+Homepage = "https://github.com/anchildress1/rai-lint"
+Repository = "https://github.com/anchildress1/rai-lint"
+Issues = "https://github.com/anchildress1/rai-lint/issues"
 
 [project.optional-dependencies]
 
