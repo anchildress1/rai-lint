@@ -134,7 +134,7 @@ jobs:
 
       - name: Generate SBOM
         id: sbom
-        run: npx --ignore-scripts @cyclonedx/cyclonedx-npm@5.0.0 --package-lock-only --omit dev --output-reproducible --output-file packages/node-commitlint/sbom.json --mc-type library --workspace packages/node-commitlint
+        run: npx --yes --ignore-scripts @cyclonedx/cyclonedx-npm@5.0.0 --package-lock-only --omit dev --output-reproducible --output-file packages/node-commitlint/sbom.json --mc-type library --workspace packages/node-commitlint
 
       - name: Package tarball (npm pack)
         id: pack
