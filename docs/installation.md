@@ -26,7 +26,7 @@
 ### 1. Install the Plugin
 
 ```bash
-npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai @commitlint/cli @commitlint/config-conventional
+npm install --save-dev commitlint-plugin-rai @commitlint/cli @commitlint/config-conventional
 ```
 
 ### 2. Configure Commitlint
@@ -36,7 +36,7 @@ Create or update `commitlint.config.js`:
 ```javascript
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
+  plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
     // Optional but recommended for complete accountability:
@@ -179,7 +179,7 @@ This should get rejected with an error message explaining what you need to add.
 
 ### Node.js Issues
 
-**Problem**: `Module not found: @checkmarkdevtools/commitlint-plugin-rai`
+**Problem**: `Module not found: commitlint-plugin-rai`
 
 **Fix**: You didn't install it. Run the install command again and check `package.json`.
 

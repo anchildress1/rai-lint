@@ -1,6 +1,6 @@
-# Contributing to CheckMarK RAI Lint
+# Contributing to RAI Lint
 
-Thank you for your interest in CheckMarK RAI Lint!
+Thank you for your interest in RAI Lint!
 
 ## AI Attribution Policy
 

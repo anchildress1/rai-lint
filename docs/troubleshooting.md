@@ -7,21 +7,21 @@
 
 ## Node.js / Commitlint Issues
 
-### "Cannot find module '@checkmarkdevtools/commitlint-plugin-rai'"
+### "Cannot find module 'commitlint-plugin-rai'"
 
 **What happened**: The package isn't installed or node_modules is broken.
 
 **Fix it**:
 
 ```bash
-npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
+npm install --save-dev commitlint-plugin-rai
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 ---
 
-### "Plugin not found: @checkmarkdevtools/commitlint-plugin-rai"
+### "Plugin not found: commitlint-plugin-rai"
 
 **What happened**: You didn't add it to your `commitlint.config.js`.
 
@@ -29,7 +29,7 @@ npm install
 
 ```javascript
 export default {
-  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
+  plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
   },
@@ -316,14 +316,14 @@ gitlint --config
 
 If none of this worked:
 
-1. Check [GitHub Issues](https://github.com/ChecKMarKDevTools/rai-lint/issues)
+1. Check [GitHub Issues](https://github.com/anchildress1/rai-lint/issues)
 2. Run with `--debug` or `--verbose` flags
 3. Verify your versions:
 
    ```bash
    # Node
    node --version
-   npm list @checkmarkdevtools/commitlint-plugin-rai
+   npm list commitlint-plugin-rai
 
    # Python
    python --version

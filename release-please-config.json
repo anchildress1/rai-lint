@@ -3,7 +3,7 @@
   "packages": {
     "packages/node-commitlint": {
       "release-type": "node",
-      "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
+      "package-name": "commitlint-plugin-rai",
       "changelog-path": "CHANGELOG.md",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true

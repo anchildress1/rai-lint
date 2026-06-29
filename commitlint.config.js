@@ -6,5 +6,5 @@ export default {
     'rai-footer-exists': [2, 'always'],
     'subject-case': [0],
   },
-  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
+  plugins: ['commitlint-plugin-rai'],
 };
