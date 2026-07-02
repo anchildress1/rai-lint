@@ -76,6 +76,9 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
+    env:
+      # The checked-in .python-version (3.13) would otherwise override the matrix interpreter
+      UV_PYTHON: ${{ matrix.python-version }}
 
     steps:
       - uses: actions/checkout@v7.0.0
