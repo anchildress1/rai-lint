@@ -64,7 +64,7 @@ jobs:
 
       - name: Get Node version from package.json
         id: node-version
-        run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v6.4.0

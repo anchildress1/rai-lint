@@ -94,7 +94,7 @@ fail_under = 80
 output = "reports/coverage.xml"
 
 [tool.pytest.ini_options]
-addopts = "--junitxml=reports/junit-py.xml --cov=gitlint_rai --cov-report=term-missing --cov-fail-under=80"
+addopts = "--junitxml=reports/junit-py.xml --cov=gitlint_rai --cov-report=term-missing"
 testpaths = ["tests"]
 
 [tool.black]

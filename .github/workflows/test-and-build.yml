@@ -41,8 +41,6 @@ jobs:
       - name: Install root dependencies (locked)
         run: npm ci --ignore-scripts
 
-      # Workspace dependencies are installed at the repo root to ensure shared
-      # dev tools (eslint, etc.) are available to each matrix job.
       - name: Run linter
         run: npm run lint --workspace=packages/node-commitlint
 
