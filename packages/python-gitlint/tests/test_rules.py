@@ -1,8 +1,18 @@
+import re
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
 
-from gitlint_rai.rules import RaiFooterExists
+from gitlint_rai.rules import AI_ATTRIBUTION_KEYS, AI_ATTRIBUTION_PATTERN, RaiFooterExists
+
+NODE_RULE_SOURCE = (
+    Path(__file__).resolve().parents[2]
+    / "node-commitlint"
+    / "src"
+    / "rules"
+    / "rai-footer-exists.ts"
+)
 
 
 @pytest.fixture
@@ -13,11 +23,6 @@ def rule():
 def create_commit(message: str):
     commit = Mock()
     commit.message.full = message
-
-    lines = message.split("\n")
-    commit.message.title = lines[0] if lines else ""
-    commit.message.body = lines[1:] if len(lines) > 1 else []
-
     return commit
 
 
@@ -38,6 +43,26 @@ class TestRaiFooterExists:
         violations = rule.validate(commit)
         assert len(violations) == 0, f"Expected no violations for {footer}"
 
+    def test_crlf_line_endings(self, rule):
+        commit = create_commit("feat: add feature\r\n\r\nGenerated-by: AI <ai@example.com>\r\n")
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
+    def test_attribution_anywhere_in_message(self, rule):
+        commit = create_commit(
+            "feat: add feature\n\nGenerated-by: AI <ai@example.com>\n\nMore detail after."
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
+    def test_attribution_with_other_footers(self, rule):
+        commit = create_commit(
+            "feat: add feature\n\nDescription\n\nCloses #123\n\n"
+            "Assisted-by: GitHub Copilot <copilot@github.com>"
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
     def test_generated_by_footer_no_email(self, rule):
         commit = create_commit("feat: add new feature\n\nGenerated-by: GitHub Copilot")
         violations = rule.validate(commit)
@@ -55,12 +80,27 @@ class TestRaiFooterExists:
         violations = rule.validate(commit)
         assert len(violations) == 1
 
-    def test_multiple_ai_tools(self, rule):
+    def test_missing_attribution_name(self, rule):
+        commit = create_commit("feat: add feature\n\nGenerated-by: <ai@example.com>")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_no_whitespace_after_colon(self, rule):
+        commit = create_commit("feat: add feature\n\nGenerated-by:AI <ai@example.com>")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_no_whitespace_before_email(self, rule):
+        commit = create_commit("feat: add feature\n\nGenerated-by: AI<ai@example.com>")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_attribution_spanning_multiple_lines(self, rule):
         commit = create_commit(
-            "feat: complex feature\n\nGenerated-by: ChatGPT <chatgpt@openai.com>"
+            "feat: add feature\n\nGenerated-by: GitHub Copilot\n<copilot@github.com>"
         )
         violations = rule.validate(commit)
-        assert len(violations) == 0
+        assert len(violations) == 1
 
     def test_redos_resistance_long_trailer_value(self, rule):
         long_value = "A" * 10000
@@ -76,42 +116,34 @@ class TestRaiFooterExists:
         violations = rule.validate(commit)
         assert len(violations) == 1
 
-    def test_empty_body(self, rule):
-        commit = Mock()
-        commit.message.full = "feat: add feature"
-        commit.message.title = "feat: add feature"
-        commit.message.body = []
+    def test_empty_message(self, rule):
+        commit = create_commit("")
         violations = rule.validate(commit)
         assert len(violations) == 1
 
-    @pytest.mark.parametrize(
-        "malformed",
-        [
-            ": value only",
-            "123-key: value",
-        ],
+    def test_none_message(self, rule):
+        commit = create_commit("")
+        commit.message.full = None
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_no_body(self, rule):
+        commit = create_commit("feat: add feature")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+
+def test_pattern_parity_with_node_plugin():
+    """Both plugins promise identical validation; fail loudly if the sources drift."""
+    source = NODE_RULE_SOURCE.read_text()
+
+    node_keys = re.findall(r"'([A-Za-z-]+-by)'", source)
+    assert node_keys == AI_ATTRIBUTION_KEYS
+
+    template = re.search(
+        r"new RegExp\(\s*`\^\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`", source
     )
-    def test_malformed_trailers(self, rule, malformed):
-        commit = create_commit(f"feat: add feature\n\n{malformed}")
-        violations = rule.validate(commit)
-        assert len(violations) == 1
-
-    def test_trailer_block_stops_on_blank_line(self, rule):
-        commit = create_commit(
-            "feat: add feature\n\nKey: value\n\nGenerated-by: AI <ai@example.com>"
-        )
-        violations = rule.validate(commit)
-        assert len(violations) == 0
-
-    def test_non_trailer_stops_trailer_block(self, rule):
-        commit = create_commit("feat: add feature\n\nSome text\nKey: value")
-        violations = rule.validate(commit)
-        assert len(violations) == 1
-
-    def test_all_blank_body_lines(self, rule):
-        """If message.body contains only blank lines, the trailer block finder
-        should return empty and parsing should report missing attribution."""
-        # Title followed by two blank lines -> body becomes ['', '']
-        commit = create_commit("feat: add feature\n\n\n")
-        violations = rule.validate(commit)
-        assert len(violations) == 1
+    assert template, "pattern template not found in Node plugin source"
+    node_suffix = template.group(1).replace("\\\\", "\\")
+    python_suffix = AI_ATTRIBUTION_PATTERN.pattern.split(")", 1)[1]
+    assert node_suffix == python_suffix
