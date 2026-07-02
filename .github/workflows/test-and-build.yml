@@ -53,7 +53,7 @@ jobs:
       - name: Upload Node coverage and test results to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         env:
-          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: packages/node-commitlint/reports/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
           flags: node
@@ -122,7 +122,7 @@ jobs:
       - name: Upload Python coverage and test results to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         env:
-          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: packages/python-gitlint/reports/coverage.xml,packages/python-gitlint/reports/junit-py.xml
           flags: python
