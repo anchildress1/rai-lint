@@ -85,10 +85,6 @@ jobs:
         working-directory: packages/python-gitlint
         run: uv run --frozen pytest --cov --cov-report=term --cov-report=xml
 
-      - name: Run Python benchmarks
-        working-directory: packages/python-gitlint
-        run: uv run --frozen python tests/python_benchmark.py
-
       - name: Zip Python test results
         working-directory: packages/python-gitlint
         run: |

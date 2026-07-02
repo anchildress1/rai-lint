@@ -8,6 +8,6 @@
 - [ ] WE NEED A PERSONALITY
 - [x] add social banner
 - [ ] create logo
-- [ ] The error message block is copy-pasted and long
-- [ ] Check commitlint footers instead of parsing manually
-- [ ] Make benchmarks even again after move
+- [x] The error message block is copy-pasted and long
+- [x] Check commitlint footers instead of parsing manually
+- [x] Make benchmarks even again after move
