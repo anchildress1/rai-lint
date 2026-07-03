@@ -4,7 +4,12 @@ from unittest.mock import Mock
 
 import pytest
 
-from gitlint_rai.rules import AI_ATTRIBUTION_KEYS, AI_ATTRIBUTION_PATTERN, RaiFooterExists
+from gitlint_rai.rules import (
+    AI_ATTRIBUTION_KEYS,
+    AI_ATTRIBUTION_PATTERN,
+    VIOLATION_MESSAGE,
+    RaiFooterExists,
+)
 
 NODE_RULE_SOURCE = (
     Path(__file__).resolve().parents[2]
@@ -137,13 +142,31 @@ def test_pattern_parity_with_node_plugin():
     """Both plugins promise identical validation; fail loudly if the sources drift."""
     source = NODE_RULE_SOURCE.read_text()
 
-    node_keys = re.findall(r"'([A-Za-z-]+-by)'", source)
+    keys_block = re.search(r"const AI_ATTRIBUTION_KEYS = \[(.*?)\]", source, re.DOTALL)
+    assert keys_block, "key list not found in Node plugin source"
+    node_keys = re.findall(r"'([^']+)'", keys_block.group(1))
     assert node_keys == AI_ATTRIBUTION_KEYS
 
+    # The 'im' flags are part of the match so dropping either flag in the
+    # Node source fails this test, not just changes to the pattern text.
+    # String.raw means the template text is the literal pattern — no unescaping.
     template = re.search(
-        r"new RegExp\(\s*`\^\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`", source
+        r"new RegExp\(\s*String\.raw`\^\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`,\s*'im',?\s*\)",
+        source,
     )
-    assert template, "pattern template not found in Node plugin source"
-    node_suffix = template.group(1).replace("\\\\", "\\")
+    assert template, "pattern template with 'im' flags not found in Node plugin source"
+    node_suffix = template.group(1)
     python_suffix = AI_ATTRIBUTION_PATTERN.pattern.split(")", 1)[1]
     assert node_suffix == python_suffix
+    assert AI_ATTRIBUTION_PATTERN.flags & re.IGNORECASE
+    assert AI_ATTRIBUTION_PATTERN.flags & re.MULTILINE
+
+
+def test_message_parity_with_node_plugin():
+    """The violation text is duplicated across plugins; fail loudly if it drifts."""
+    source = NODE_RULE_SOURCE.read_text()
+
+    block = re.search(r"const VIOLATION_MESSAGE =\n(.*?);", source, re.DOTALL)
+    assert block, "violation message not found in Node plugin source"
+    node_message = "".join(re.findall(r"'([^']*)'", block.group(1))).replace("\\n", "\n")
+    assert node_message == VIOLATION_MESSAGE

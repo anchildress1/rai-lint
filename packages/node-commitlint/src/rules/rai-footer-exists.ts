@@ -19,7 +19,7 @@ const AI_ATTRIBUTION_KEYS = [
 // Must stay identical to the Python plugin's pattern — enforced by
 // test_pattern_parity_with_node_plugin in the Python suite.
 const AI_ATTRIBUTION_PATTERN = new RegExp(
-  `^(?:${AI_ATTRIBUTION_KEYS.join('|')}):[^\\S\\r\\n]+[^\\s<][^<\\r\\n]*(?<=\\s)<[^>\\r\\n]+>\\r?$`,
+  String.raw`^(?:${AI_ATTRIBUTION_KEYS.join('|')}):[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>\r?$`,
   'im',
 );
 
