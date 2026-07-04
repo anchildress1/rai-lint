@@ -10,7 +10,7 @@ authors = [
 ]
 readme = "README.md"
 description = "Gitlint plugin for RAI footer validation"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11,<3.15"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
 dependencies = ["gitlint>=0.19.1"]
 license = "LicenseRef-PolyForm-Shield-1.0.0"
@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: Software Development :: Version Control :: Git",
     "Typing :: Typed",
@@ -56,9 +57,6 @@ include = ["gitlint_rai*"]
 [tool.setuptools.package-data]
 gitlint_rai = ["py.typed", "sbom/sbom.cdx.json"]
 
-[project.entry-points."gitlint.plugins"]
-rai-footer-exists = "gitlint_rai.rules:RaiFooterExists"
-
 [project.scripts]
 gitlint-rai = "gitlint_rai.__main__:main"
 
@@ -72,7 +70,6 @@ omit = [
     "venv/*",
     "version.py",
     "**/__init__.py",
-    "**/__main__.py",
 ]
 
 [tool.coverage.report]
@@ -84,7 +81,7 @@ exclude_lines = [
     "raise AssertionError",
     "raise NotImplementedError",
     "if 0:",
-    "if __name__ == '__main__':",
+    "if __name__ == .__main__.:",
 ]
 show_missing = true
 precision = 2
@@ -99,7 +96,7 @@ testpaths = ["tests"]
 
 [tool.black]
 line-length = 100
-target-version = ['py311', 'py312', 'py313']
+target-version = ['py311', 'py312', 'py313', 'py314']
 
 [tool.isort]
 profile = "black"
