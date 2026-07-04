@@ -8,25 +8,25 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.6](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.5...v0.1.6) (2026-01-18) 🤖
+## [0.1.6](https://github.com/anchildress1/rai-lint/compare/v0.1.5...v0.1.6) (2026-01-18) 🤖
 
 > _Release Please has been gently informed what “initial” means._
 
 Pinned Release Please’s initial version and enforced the single-tag scheme at the top level, so it stops trying to “bootstrap” a repo that already has tags and a manifest.
 
-## [0.1.5](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.4...v0.1.5) (2026-01-18) 🧯
+## [0.1.5](https://github.com/anchildress1/rai-lint/compare/v0.1.4...v0.1.5) (2026-01-18) 🧯
 
 > _A small patch with very little drama, which is exactly the point._
 
 Docs got tweaked (again) to be more explicit about `Signed-off-by` guidance, and yes: I’m still trying to make the commitlint plugin install stop exploding under strict peer dependency enforcement. That’s the whole release. _Aside:_ if Release Please changes its mind again and decides this release never happened, I cannot be held accountable; Git can take the stand.
 
-## [0.1.4](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.3...v0.1.4) (2026-01-14) 🧹
+## [0.1.4](https://github.com/anchildress1/rai-lint/compare/v0.1.3...v0.1.4) (2026-01-14) 🧹
 
 > _Because even the tiniest version bump deserves a drumroll, or at least a polite cough._
 
 A quick patch to fix the commitlint package version that was apparently auditioning for a game of hide-and-seek. No user-facing changes, just the machinery getting its act together.
 
-## [0.1.3](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.2...v0.1.3) (2026-01-08) 📡📡📡
+## [0.1.3](https://github.com/anchildress1/rai-lint/compare/v0.1.2...v0.1.3) (2026-01-08) 📡📡📡
 
 > _A boring release, in the best possible way:_ this one is about making CI/release automation less fragile and keeping dependencies current.
 
@@ -38,13 +38,13 @@ No user-facing rule behavior changes in either package. If you linted commits ye
 - **Security + supply chain posture got a tune-up.** The security audit workflow was improved, and the `astral-sh/setup-uv` action was bumped so the Python toolchain setup stays aligned with the ecosystem.
 - **Paper cuts were removed.** A couple of small-but-annoying config fixes landed (explicit PR pattern, missing Python version directive), and versions were normalized after an earlier mismatch.
 
-## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.1...v0.1.2) (2025-12-30) 📡 📡
+## [0.1.2](https://github.com/anchildress1/rai-lint/compare/v0.1.1...v0.1.2) (2025-12-30) 📡 📡
 
 > _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
 
 No user-facing behavior changes in either package, but this release is a realignment: workflows were restructured, release logic was consolidated, and the surrounding machinery now matches how these plugins actually work instead of how it used to pretend to.
 
-## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.0...v0.1.1) (2025-12-29) 📡
+## [0.1.1](https://github.com/anchildress1/rai-lint/compare/v0.1.0...v0.1.1) (2025-12-29) 📡
 
 > _Because the releases technically worked on GitHub, then immediately fell apart when asked to do literally anything else, prompting a debugging session I would describe as "character-building."_
 

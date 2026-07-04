@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  A commitlint plugin that enforces exactly one thing:<br />
+  A gitlint plugin that enforces exactly one thing:<br />
   if AI touched the code, say so in the commit. ⚖️
 </p>
 
@@ -31,44 +31,39 @@ uv add gitlint-rai
 
 ## Usage 🚦
 
-Add this to your `.gitlint` config:
-
-```ini
-[general]
-extra-path=gitlint_rai
-```
-
-Then run:
-
-```bash
-gitlint
-```
-
-Or use the standalone wrapper:
+Run the bundled wrapper — it loads the RAI rules automatically and accepts all gitlint arguments:
 
 ```bash
 gitlint-rai
+gitlint-rai --msg-filename .git/COMMIT_EDITMSG
+```
+
+Prefer plain `gitlint`? Point your `.gitlint` config at the installed package:
+
+```ini
+[general]
+extra-path=/path/to/site-packages/gitlint_rai
+```
+
+Get that path with:
+
+```bash
+python -c "import gitlint_rai, pathlib; print(pathlib.Path(gitlint_rai.__file__).parent)"
 ```
 
 To verify the rule loaded:
 
 ```bash
-gitlint --list-rules | grep rai-footer-exists
+gitlint-rai --debug
 ```
 
-Expected output:
-
-```
-rai-footer-exists  Commit message must include a valid RAI footer
-```
-
-If you see that, the plugin is active and doing its job.
+Look for `rai-footer-exists` in the loaded-rules output. If you see it, the plugin is active and doing its job.
 
 ## Valid Trailers 📌
 
-Pick **exactly one**.
-If you skip it, the commit fails.
-If you use two, the commit also fails.
+Pick the one that matches the **majority AI contribution**.
+Skip it entirely and the commit fails.
+Extra footers are fine — the rule only checks that at least one valid footer exists.
 
 This is not a debate.
 
@@ -93,7 +88,7 @@ This plugin is the practical follow-through.
 
 ## Requirements ⚙️
 
-- Python >= 3.11, < 3.13
+- Python >= 3.11, < 3.15
 - gitlint >= 0.19.1
 
 ## License 📄

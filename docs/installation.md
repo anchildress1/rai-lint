@@ -9,13 +9,13 @@
 
 ### Node.js Projects
 
-- Node.js >= 20.0.0, < 27.0.0
+- Node.js >= 22.0.0, < 27.0.0
 - npm or yarn
 - A Git repository (obviously)
 
 ### Python Projects
 
-- Python >= 3.11, < 3.13
+- Python >= 3.11, < 3.15
 - uv (not pip—use uv)
 - A Git repository
 
@@ -40,7 +40,7 @@ export default {
   rules: {
     'rai-footer-exists': [2, 'always'],
     // Optional but recommended for complete accountability:
-    // 'signed-off-by-exists': [2, 'always'],
+    // 'signed-off-by': [2, 'always'],
   },
 };
 ```
@@ -96,14 +96,22 @@ uv add gitlint-rai --dev
 
 ### 2. Configure Gitlint
 
-Create or update `.gitlint`:
+Simplest path: run the bundled `gitlint-rai` CLI instead of `gitlint`. It loads the RAI rules automatically and accepts all gitlint arguments — no config needed.
+
+For plain `gitlint`, point `.gitlint` at the installed package:
 
 ```ini
 [general]
-contrib = gitlint_rai.rules.RaiFooterExists
+extra-path=/path/to/site-packages/gitlint_rai
 
 # Optional but recommended for complete accountability:
-# contrib = gitlint_rai.rules.RaiFooterExists,gitlint_rai.rules.SignedOffByExists
+# contrib=contrib-body-requires-signed-off-by
+```
+
+Get that path with:
+
+```bash
+python -c "import gitlint_rai, pathlib; print(pathlib.Path(gitlint_rai.__file__).parent)"
 ```
 
 ### 3. Set Up Git Hooks
@@ -124,9 +132,10 @@ repos:
     hooks:
       - id: gitlint
         name: gitlint
-        entry: gitlint
+        entry: gitlint-rai
         args: [--msg-filename]
         language: python
+        additional_dependencies: ['gitlint-rai']
         stages: [commit-msg]
 ```
 
@@ -144,7 +153,7 @@ Create `.git/hooks/commit-msg`:
 
 ```bash
 #!/bin/sh
-gitlint --msg-filename="$1"
+gitlint-rai --msg-filename "$1"
 ```
 
 Make it executable:
@@ -221,7 +230,7 @@ commit-msg:
     commitlint:
       run: npx --no-install commitlint --edit {1}
     gitlint:
-      run: gitlint --msg-filename {1}
+      run: gitlint-rai --msg-filename {1}
 ```
 
 ### pre-commit Configuration
@@ -238,8 +247,9 @@ repos:
 
       - id: gitlint
         name: gitlint
-        entry: gitlint
+        entry: gitlint-rai
         args: [--msg-filename]
         language: python
+        additional_dependencies: ['gitlint-rai']
         stages: [commit-msg]
 ```

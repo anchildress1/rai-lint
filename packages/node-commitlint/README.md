@@ -41,9 +41,9 @@ Once this is in place, commitlint will refuse to proceed until a valid RAI trail
 
 ## Valid Trailers 📌
 
-Pick **exactly one**.
-Skip it and the commit fails.
-Use more than one and the commit also fails.
+Pick the one that matches the **majority AI contribution**.
+Skip it entirely and the commit fails.
+Extra footers are fine — the rule only checks that at least one valid footer exists.
 
 No negotiations.
 
@@ -68,7 +68,7 @@ This plugin is the boring enforcement layer that follows.
 
 ## Requirements ⚙️
 
-- Node.js >= 20.0.0
+- Node.js >= 22.0.0, < 27.0.0
 - @commitlint/cli >= 19.0.0
 
 ## License 📄

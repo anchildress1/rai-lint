@@ -154,7 +154,7 @@ Format: `Signed-off-by: Your Name <your.email@example.com>`
 > [!NOTE]
 > All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers). Email addresses **must** use angle brackets (`Name <email@example.com>`) — this is stricter than Git's spec but matches Git's own convention and ensures consistency.
 >
-> **By default, only RAI footers are enforced.** The `signed-off-by-exists` rule is available separately and can be enabled in your configuration for complete accountability.
+> **By default, only RAI footers are enforced.** Enforce `Signed-off-by` too via commitlint's built-in `signed-off-by` rule or gitlint's `contrib-body-requires-signed-off-by` contrib rule.
 
 ---
 
@@ -174,7 +174,7 @@ export default {
   plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
-    'signed-off-by-exists': [2, 'always'],
+    'signed-off-by': [2, 'always'],
   },
 };
 ```
@@ -185,11 +185,23 @@ export default {
 uv add gitlint-rai
 ```
 
-**Configure in `.gitlint`:**
+**Run the bundled `gitlint-rai` CLI (recommended)** — it loads the RAI rules automatically and accepts all gitlint arguments:
+
+```bash
+gitlint-rai --msg-filename .git/COMMIT_EDITMSG
+```
+
+**Or point plain `gitlint` at the installed package in `.gitlint`:**
 
 ```ini
 [general]
-contrib = gitlint_rai.rules.RaiFooterExists,gitlint_rai.rules.SignedOffByExists
+extra-path=/path/to/site-packages/gitlint_rai
+```
+
+Get that path with:
+
+```bash
+python -c "import gitlint_rai, pathlib; print(pathlib.Path(gitlint_rai.__file__).parent)"
 ```
 
 ---
@@ -233,9 +245,10 @@ repos:
     hooks:
       - id: gitlint
         name: gitlint
-        entry: gitlint
+        entry: gitlint-rai
         args: [--msg-filename]
         language: python
+        additional_dependencies: ['gitlint-rai']
         stages: [commit-msg]
 ```
 

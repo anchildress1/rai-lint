@@ -99,21 +99,27 @@ uv run python -c "import gitlint_rai; print('Installed')"
 
 ---
 
-### "gitlint.exceptions.GitLintError: No such contrib rule"
+### Gitlint can't find the RAI rules
 
-**What happened**: Your `.gitlint` config is wrong.
+**What happened**: Your `.gitlint` config uses `contrib=` — that only loads gitlint's own bundled contrib rules, never this package's. External rules load via `extra-path` (a filesystem path) or the `gitlint-rai` CLI.
 
-**Fix it**: Make sure it says:
+**Fix it**: Use `gitlint-rai` instead of `gitlint` (it loads the rules automatically), or point `extra-path` at the installed package:
 
 ```ini
 [general]
-contrib = gitlint_rai.rules.RaiFooterExists
+extra-path=/path/to/site-packages/gitlint_rai
 ```
 
-**Debug it**:
+Get that path with:
 
 ```bash
-gitlint --debug
+python -c "import gitlint_rai, pathlib; print(pathlib.Path(gitlint_rai.__file__).parent)"
+```
+
+**Debug it** (`--debug` lists the loaded rules):
+
+```bash
+gitlint-rai --debug
 python -c "from gitlint_rai.rules import RaiFooterExists; print(RaiFooterExists)"
 ```
 
@@ -193,7 +199,7 @@ ls -la .git/hooks/commit-msg
 echo "Generated-by: GitHub Copilot <copilot@github.com>" | xxd
 
 # Test the pattern
-echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx --no-install commitlint
+printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\n' | npx --no-install commitlint
 ```
 
 ---
@@ -282,7 +288,7 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ```bash
 # Test a commit message
-echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx --no-install commitlint
+printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\n' | npx --no-install commitlint
 
 # Verbose output
 npx --no-install commitlint --verbose --edit .git/COMMIT_EDITMSG
@@ -298,16 +304,13 @@ npx --no-install commitlint --print-config
 
 ```bash
 # Test a commit message
-echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | gitlint
+printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\n' | gitlint-rai
 
 # Verbose output
-gitlint --verbose
+gitlint-rai --verbose
 
-# Debug mode
-gitlint --debug
-
-# Check config
-gitlint --config
+# Debug mode (also prints the active config and loaded rules)
+gitlint-rai --debug
 ```
 
 ---

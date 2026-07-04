@@ -31,3 +31,5 @@ Each pattern matches a complete line of the form `Key: Name <contact>`:
 - A matching line anywhere in the message satisfies the rule
 
 The Node plugin (`packages/node-commitlint/src/rules/rai-footer-exists.ts`) and the Python plugin (`packages/python-gitlint/gitlint_rai/rules.py`) build their patterns from the same key list and pattern template. A parity test in the Python suite (`test_pattern_parity_with_node_plugin`) fails if the two sources drift.
+
+One known nuance: the inputs differ slightly. Node validates the raw commit message, while gitlint strips comment lines and scissors content (`git commit -v` diffs) before rules run. A footer inside that stripped region counts for commitlint but not for gitlint.

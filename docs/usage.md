@@ -13,7 +13,7 @@ RAI Lint enforces AI attribution in Git commit trailers. No attribution footer =
 Five footer patterns. All case-insensitive. Pick **one** that represents the **majority AI contribution**.
 
 > [!TIP]
-> While the `Signed-off-by` footer is optional, it's strongly recommended for complete accountability. It serves as YOUR human stamp confirming you reviewed and take responsibility for the AI attribution. Enable the `signed-off-by-exists` rule to enforce it.
+> While the `Signed-off-by` footer is optional, it's strongly recommended for complete accountability. It serves as YOUR human stamp confirming you reviewed and take responsibility for the AI attribution. Enforce it with commitlint's built-in `signed-off-by` rule or gitlint's `contrib-body-requires-signed-off-by` contrib rule.
 
 ### Signed-off-by
 
@@ -138,7 +138,7 @@ Co-authored-by: GitHub Copilot <copilot@github.com>
 Test a commit message (note: you'd normally use `git commit -s`):
 
 ```bash
-echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Your Name <your.email@example.com>" | npx --no-install commitlint
+printf 'feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Your Name <your.email@example.com>\n' | npx --no-install commitlint
 ```
 
 Validate the last commit:
@@ -161,28 +161,30 @@ npx --no-install commitlint --from main --to develop
 
 ### Python / Gitlint
 
+`gitlint-rai` wraps gitlint, loads the RAI rules automatically, and accepts all gitlint arguments. Plain `gitlint` works too if `.gitlint` sets `extra-path` (see [installation](installation.md)).
+
 Lint the last commit (assumes you used `git commit -s`):
 
 ```bash
-gitlint
+gitlint-rai
 ```
 
 Lint a specific commit:
 
 ```bash
-gitlint --commit abc123f
+gitlint-rai --commit abc123f
 ```
 
 Lint from a file:
 
 ```bash
-gitlint --msg-filename .git/COMMIT_EDITMSG
+gitlint-rai --msg-filename .git/COMMIT_EDITMSG
 ```
 
 Test a message via stdin (note: you'd normally use `git commit -s`):
 
 ```bash
-echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Your Name <your.email@example.com>" | gitlint
+printf 'feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Your Name <your.email@example.com>\n' | gitlint-rai
 ```
 
 ---
@@ -202,7 +204,7 @@ Most IDEs don't natively support custom Git trailers. Add footers manually or us
 ```yaml
 name: Lint Commits
 
-on: [push, pull_request]
+on: pull_request
 
 jobs:
   commitlint:
@@ -214,7 +216,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
 
       - run: npm ci
 
@@ -226,7 +228,7 @@ jobs:
 ```yaml
 commitlint:
   stage: test
-  image: node:20
+  image: node:22
   script:
     - npm ci
     - npx --no-install commitlint --from $CI_MERGE_REQUEST_TARGET_BRANCH_SHA --to HEAD
@@ -274,7 +276,7 @@ stage('Commit Lint') {
 
 **Question**: Can I include multiple RAI footers?
 
-**Answer**: No. Pick the one that represents the **majority AI contribution**.
+**Answer**: Yes — the rule only checks that at least one valid footer exists. Convention: pick the one that represents the **majority AI contribution**.
 
 ### Amending Commits
 
