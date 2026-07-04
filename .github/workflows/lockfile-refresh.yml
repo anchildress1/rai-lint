@@ -135,9 +135,7 @@ jobs:
                   retention-days: 1
 
     # Privileged (contents: write) but never executes branch code: it only
-    # restores the lockfile artifact and pushes. No execution clears the
-    # untrusted-checkout/critical finding; persist-credentials:false keeps the
-    # checkout from leaving push credentials in the working tree (high finding).
+    # restores the lockfile artifact and pushes.
     commit-lockfiles:
         name: Commit refreshed lockfiles (${{ matrix.ref }})
         runs-on: ubuntu-latest

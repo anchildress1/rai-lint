@@ -6,6 +6,16 @@ on:
   push:
     paths:
       - .github/workflows/security-audit.yml
+  # License Compliance also runs on PRs that touch dependency files;
+  # the other jobs are guarded with github.event_name != 'pull_request'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - package-lock.json
+      - packages/python-gitlint/uv.lock
+      - package.json
+      - packages/*/package.json
+      - packages/python-gitlint/pyproject.toml
   workflow_dispatch:
 
 concurrency:
@@ -13,10 +23,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  scorecard:
-    name: Scorecard
+  trivy:
+    name: Trivy
     runs-on: ubuntu-latest
-    if: ${{ github.ref_type != 'tag' }}
+    if: ${{ github.ref_type != 'tag' && github.event_name != 'pull_request' }}
     timeout-minutes: 12
     permissions:
       contents: read
@@ -55,7 +65,7 @@ jobs:
   license-scan:
     name: License Compliance
     runs-on: ubuntu-latest
-    if: ${{ github.ref_type != 'tag' }}
+    if: ${{ github.ref_type != 'tag' && (github.event_name != 'pull_request' || github.event.pull_request.draft == false) }}
     timeout-minutes: 7
     permissions:
       contents: read
@@ -84,6 +94,9 @@ jobs:
         run: |
           uv sync --locked --no-dev --directory packages/python-gitlint/
 
+      - name: Self-test license checker
+        run: python3 .github/scripts/test_check_licenses.py
+
       - name: Check Node licenses
         run: |
           npx --yes --ignore-scripts license-checker@25.0.1 --json --excludePrivatePackages --production --start packages/node-commitlint > node-licenses.json
@@ -110,7 +123,7 @@ jobs:
   codeql:
     name: CodeQL analysis
     runs-on: ubuntu-latest
-    if: ${{ github.ref_type != 'tag' }}
+    if: ${{ github.ref_type != 'tag' && github.event_name != 'pull_request' }}
     timeout-minutes: 10
     permissions:
       contents: read
