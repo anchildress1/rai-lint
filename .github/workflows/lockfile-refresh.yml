@@ -38,7 +38,7 @@ jobs:
                   set -euo pipefail
 
                   api="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100"
-                  branches_json=$(curl -fsSL \
+                  branches_json=$(curl -fsSL --proto '=https' \
                     -H "Authorization: Bearer ${GH_TOKEN}" \
                     -H "Accept: application/vnd.github+json" \
                     -H "X-GitHub-Api-Version: 2022-11-28" \
