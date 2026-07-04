@@ -152,6 +152,11 @@ jobs:
       - name: Install root dependencies (locked)
         run: npm ci --ignore-scripts
 
+      # commitlint.config.js loads the workspace plugin from dist/, which
+      # --ignore-scripts leaves unbuilt
+      - name: Build workspace plugin
+        run: npm run build --workspace commitlint-plugin-rai
+
       - name: Lint PR commit messages
         run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}
 
