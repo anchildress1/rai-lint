@@ -156,10 +156,10 @@ jobs:
           fi
           zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json packages/node-commitlint/CHANGELOG.md
 
+      # Auth is OIDC trusted publishing (configured via npm trust after the
+      # manual first publish) — no token, no NODE_AUTH_TOKEN
       - name: Publish to npm
         id: publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
 
       - name: Download test results
