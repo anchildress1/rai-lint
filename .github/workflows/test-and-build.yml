@@ -26,6 +26,8 @@ jobs:
     strategy:
       matrix:
         node-version: [22, 24, 26]
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v7.0.0
@@ -50,10 +52,11 @@ jobs:
       - name: Run tests
         run: npm test --workspace=packages/node-commitlint
 
+      # Dependabot and fork PRs don't receive repository secrets (even on
+      # maintainer re-runs), so gate on the token itself
       - name: Upload Node coverage and test results to Codecov
+        if: env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: packages/node-commitlint/reports/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
           flags: node
@@ -79,6 +82,7 @@ jobs:
     env:
       # The checked-in .python-version (3.13) would otherwise override the matrix interpreter
       UV_PYTHON: ${{ matrix.python-version }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v7.0.0
@@ -122,10 +126,11 @@ jobs:
           path: packages/python-gitlint/reports
           retention-days: 30
 
+      # Dependabot and fork PRs don't receive repository secrets (even on
+      # maintainer re-runs), so gate on the token itself
       - name: Upload Python coverage and test results to Codecov
+        if: env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: packages/python-gitlint/reports/coverage.xml,packages/python-gitlint/reports/junit-py.xml
           flags: python
