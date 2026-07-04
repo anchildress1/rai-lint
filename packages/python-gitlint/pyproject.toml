@@ -10,7 +10,7 @@ authors = [
 ]
 readme = "README.md"
 description = "Gitlint plugin for RAI footer validation"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11,<3.15"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
 dependencies = ["gitlint>=0.19.1"]
 license = "LicenseRef-PolyForm-Shield-1.0.0"
@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: Software Development :: Version Control :: Git",
     "Typing :: Typed",
@@ -49,15 +50,22 @@ dev = [
     "wheel",
 ]
 
+# CI-only resolution override: gitlint pins sh<2.0, whose only artifact is
+# an sdist — building it would defeat `uv sync --no-build` in workflows.
+# sh 2.x ships wheels; the suite (including real-gitlint subprocess runs)
+# gates that the override stays compatible. User installs are unaffected —
+# published metadata still defers to gitlint's own pins.
+[tool.uv]
+override-dependencies = ["sh>=2.0 ; sys_platform != 'win32'"]
+# wait out newly published versions before resolving them
+exclude-newer = "7 days"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["gitlint_rai*"]
 
 [tool.setuptools.package-data]
 gitlint_rai = ["py.typed", "sbom/sbom.cdx.json"]
-
-[project.entry-points."gitlint.plugins"]
-rai-footer-exists = "gitlint_rai.rules:RaiFooterExists"
 
 [project.scripts]
 gitlint-rai = "gitlint_rai.__main__:main"
@@ -72,7 +80,6 @@ omit = [
     "venv/*",
     "version.py",
     "**/__init__.py",
-    "**/__main__.py",
 ]
 
 [tool.coverage.report]
@@ -84,7 +91,7 @@ exclude_lines = [
     "raise AssertionError",
     "raise NotImplementedError",
     "if 0:",
-    "if __name__ == '__main__':",
+    "if __name__ == .__main__.:",
 ]
 show_missing = true
 precision = 2
@@ -94,12 +101,14 @@ fail_under = 80
 output = "reports/coverage.xml"
 
 [tool.pytest.ini_options]
-addopts = "--junitxml=reports/junit-py.xml --cov=gitlint_rai --cov-report=term-missing --cov-fail-under=80"
+addopts = "--junitxml=reports/junit-py.xml --cov=gitlint_rai --cov-report=term-missing"
 testpaths = ["tests"]
+# lets CI test straight from source (uv sync --no-build --no-install-project)
+pythonpath = ["."]
 
 [tool.black]
 line-length = 100
-target-version = ['py311', 'py312', 'py313']
+target-version = ['py311', 'py312', 'py313', 'py314']
 
 [tool.isort]
 profile = "black"

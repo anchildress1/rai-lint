@@ -12,7 +12,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 [![GitHub Repo Stars](https://img.shields.io/github/stars/anchildress1/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/anchildress1/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/issues) [![GitHub Release](https://img.shields.io/github/v/release/anchildress1/rai-lint?style=for-the-badge&color=EDC531)](https://github.com/anchildress1/rai-lint/releases) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE)
 
-[![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/checkmarkdevtools_rai-lint?color=brightgreen&server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&color=orange&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint)
+[![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/anchildress1_rai-lint?color=brightgreen&server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&color=orange&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint)
 
 ### 🗣️ Languages
 
@@ -154,7 +154,7 @@ Format: `Signed-off-by: Your Name <your.email@example.com>`
 > [!NOTE]
 > All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers). Email addresses **must** use angle brackets (`Name <email@example.com>`) — this is stricter than Git's spec but matches Git's own convention and ensures consistency.
 >
-> **By default, only RAI footers are enforced.** The `signed-off-by-exists` rule is available separately and can be enabled in your configuration for complete accountability.
+> **By default, only RAI footers are enforced.** Enforce `Signed-off-by` too via commitlint's built-in `signed-off-by` rule or gitlint's `contrib-body-requires-signed-off-by` contrib rule.
 
 ---
 
@@ -174,7 +174,7 @@ export default {
   plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
-    'signed-off-by-exists': [2, 'always'],
+    'signed-off-by': [2, 'always'],
   },
 };
 ```
@@ -185,11 +185,23 @@ export default {
 uv add gitlint-rai
 ```
 
-**Configure in `.gitlint`:**
+**Run the bundled `gitlint-rai` CLI (recommended)** — it loads the RAI rules automatically and accepts all gitlint arguments:
+
+```bash
+gitlint-rai --msg-filename .git/COMMIT_EDITMSG
+```
+
+**Or point plain `gitlint` at the installed package in `.gitlint`:**
 
 ```ini
 [general]
-contrib = gitlint_rai.rules.RaiFooterExists,gitlint_rai.rules.SignedOffByExists
+extra-path=/path/to/site-packages/gitlint_rai
+```
+
+Get that path with:
+
+```bash
+python -c "import gitlint_rai, pathlib; print(pathlib.Path(gitlint_rai.__file__).parent)"
 ```
 
 ---
@@ -233,9 +245,10 @@ repos:
     hooks:
       - id: gitlint
         name: gitlint
-        entry: gitlint
+        entry: gitlint-rai
         args: [--msg-filename]
         language: python
+        additional_dependencies: ['gitlint-rai']
         stages: [commit-msg]
 ```
 

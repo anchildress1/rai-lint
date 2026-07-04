@@ -25,7 +25,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        node-version: [20, 22, 24, 26]
+        node-version: [22, 24, 26]
 
     steps:
       - uses: actions/checkout@v7.0.0
@@ -41,8 +41,6 @@ jobs:
       - name: Install root dependencies (locked)
         run: npm ci --ignore-scripts
 
-      # Workspace dependencies are installed at the repo root to ensure shared
-      # dev tools (eslint, etc.) are available to each matrix job.
       - name: Run linter
         run: npm run lint --workspace=packages/node-commitlint
 
@@ -55,7 +53,7 @@ jobs:
       - name: Upload Node coverage and test results to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         env:
-          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: packages/node-commitlint/reports/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
           flags: node
@@ -77,7 +75,10 @@ jobs:
       contents: read
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    env:
+      # The checked-in .python-version (3.13) would otherwise override the matrix interpreter
+      UV_PYTHON: ${{ matrix.python-version }}
 
     steps:
       - uses: actions/checkout@v7.0.0
@@ -94,13 +95,13 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/python-gitlint
-        run: uv sync --locked --group dev
+        run: uv sync --locked --group dev --no-build --no-install-project
 
       - name: Run Black and isort
         working-directory: packages/python-gitlint
         run: |
-          uv run --frozen black --check gitlint_rai tests/
-          uv run --frozen isort --check-only gitlint_rai tests/
+          uv run --frozen --no-build --no-sync black --check gitlint_rai tests/
+          uv run --frozen --no-build --no-sync isort --check-only gitlint_rai tests/
 
       - name: Create reports directory
         working-directory: packages/python-gitlint
@@ -109,7 +110,7 @@ jobs:
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
         run: |
-          uv run --frozen pytest \
+          uv run --frozen --no-build --no-sync pytest \
             --cov \
             --cov-report=xml \
             --cov-report=term-missing
@@ -124,11 +125,42 @@ jobs:
       - name: Upload Python coverage and test results to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         env:
-          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: packages/python-gitlint/reports/coverage.xml,packages/python-gitlint/reports/junit-py.xml
           flags: python
           fail_ci_if_error: true
+
+  commitlint:
+    name: Commitlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && !startsWith(github.head_ref, 'release-please--')
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: 24
+          cache: "npm"
+
+      - name: Install root dependencies (locked)
+        run: npm ci --ignore-scripts
+
+      # commitlint.config.js loads the workspace plugin from dist/, which
+      # --ignore-scripts leaves unbuilt
+      - name: Build workspace plugin
+        run: npm run build --workspace commitlint-plugin-rai
+
+      # origin/<base> scopes the lint to branch-unique commits; base.sha
+      # ranges re-lint history merged in from the base branch
+      - name: Lint PR commit messages
+        run: npx commitlint --from origin/${{ github.event.pull_request.base.ref }} --to ${{ github.event.pull_request.head.sha }}
 
   dependency-review:
     name: Dependency Review

@@ -29,7 +29,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "sonarlint.connectedMode.project": {
-    "connectionId": "checkmarkdevtools",
-    "projectKey": "checkmarkdevtools_rai-lint"
+    "connectionId": "anchildress1",
+    "projectKey": "anchildress1_rai-lint"
   }
 }

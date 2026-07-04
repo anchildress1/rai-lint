@@ -20,7 +20,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=20 <27"
+    "node": ">=22 <27"
   },
   "scripts": {
     "test": "vitest run --coverage",
@@ -48,8 +48,8 @@
   },
   "homepage": "https://github.com/anchildress1/rai-lint#readme",
   "peerDependencies": {
-    "@commitlint/lint": "^19.0.0 || ^20.0.0",
-    "@commitlint/types": "^19.0.0 || ^20.0.0"
+    "@commitlint/lint": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@commitlint/types": "^19.0.0 || ^20.0.0 || ^21.0.0"
   },
   "peerDependenciesMeta": {
     "@commitlint/lint": {
@@ -60,6 +60,7 @@
     }
   },
   "devDependencies": {
+    "@commitlint/lint": "^21.0.0",
     "@commitlint/types": "^21.0.1",
     "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^4.1.0",

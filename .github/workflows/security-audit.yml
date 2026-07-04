@@ -3,9 +3,20 @@ name: Security Audit
 on:
   schedule:
     - cron: "34 3 12,26 * *" # On the 12th and 26th of every month at 3:34 AM
+  # every merge to main gets a fresh CodeQL/Trivy analysis so the default
+  # branch never goes stale between the scheduled runs
   push:
+    branches: [main]
+  # License Compliance also runs on PRs that touch dependency files;
+  # the other jobs are guarded with github.event_name != 'pull_request'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
-      - .github/workflows/security-audit.yml
+      - package-lock.json
+      - packages/python-gitlint/uv.lock
+      - package.json
+      - packages/*/package.json
+      - packages/python-gitlint/pyproject.toml
   workflow_dispatch:
 
 concurrency:
@@ -13,10 +24,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  scorecard:
-    name: Scorecard
+  trivy:
+    name: Trivy
     runs-on: ubuntu-latest
-    if: ${{ github.ref_type != 'tag' }}
+    if: ${{ github.ref_type != 'tag' && github.event_name != 'pull_request' }}
     timeout-minutes: 12
     permissions:
       contents: read
@@ -55,7 +66,7 @@ jobs:
   license-scan:
     name: License Compliance
     runs-on: ubuntu-latest
-    if: ${{ github.ref_type != 'tag' }}
+    if: ${{ github.ref_type != 'tag' && (github.event_name != 'pull_request' || github.event.pull_request.draft == false) }}
     timeout-minutes: 7
     permissions:
       contents: read
@@ -64,7 +75,7 @@ jobs:
 
       - name: Get Node version from package.json
         id: node-version
-        run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v6.4.0
@@ -77,12 +88,15 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           enable-cache: true
 
       - name: Install Python dependencies
         run: |
-          uv sync --locked --no-dev --directory packages/python-gitlint/
+          uv sync --locked --no-dev --no-build --no-install-project --directory packages/python-gitlint/
+
+      - name: Self-test license checker
+        run: python3 .github/scripts/test_check_licenses.py
 
       - name: Check Node licenses
         run: |
@@ -95,6 +109,7 @@ jobs:
           mkdir -p reports
           uvx --no-build --from cyclonedx-bom==7.1.0 cyclonedx-py environment \
             .venv/bin/python3 \
+            --pyproject pyproject.toml \
             --mc-type library \
             --output-reproducible \
             --of JSON \
@@ -110,7 +125,7 @@ jobs:
   codeql:
     name: CodeQL analysis
     runs-on: ubuntu-latest
-    if: ${{ github.ref_type != 'tag' }}
+    if: ${{ github.ref_type != 'tag' && github.event_name != 'pull_request' }}
     timeout-minutes: 10
     permissions:
       contents: read

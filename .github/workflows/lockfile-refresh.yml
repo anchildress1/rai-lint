@@ -38,7 +38,7 @@ jobs:
                   set -euo pipefail
 
                   api="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100"
-                  branches_json=$(curl -fsSL \
+                  branches_json=$(curl -fsSL --proto '=https' \
                     -H "Authorization: Bearer ${GH_TOKEN}" \
                     -H "Accept: application/vnd.github+json" \
                     -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -105,7 +105,7 @@ jobs:
             - name: Setup Python
               uses: actions/setup-python@v6.2.0
               with:
-                  python-version: "3.12"
+                  python-version: "3.13"
 
             - name: Setup uv
               uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
@@ -135,9 +135,7 @@ jobs:
                   retention-days: 1
 
     # Privileged (contents: write) but never executes branch code: it only
-    # restores the lockfile artifact and pushes. No execution clears the
-    # untrusted-checkout/critical finding; persist-credentials:false keeps the
-    # checkout from leaving push credentials in the working tree (high finding).
+    # restores the lockfile artifact and pushes.
     commit-lockfiles:
         name: Commit refreshed lockfiles (${{ matrix.ref }})
         runs-on: ubuntu-latest

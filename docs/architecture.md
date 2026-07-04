@@ -20,30 +20,16 @@ flowchart TB
 
 ## RAI Footer Validation Logic
 
-Both implementations validate Git trailers (footers) using these patterns:
+Both implementations share one validation strategy: scan the full commit message with the same anchored line regex — no structured trailer parsing on either side. This keeps behavior explicit, easy to debug, and consistent across ecosystems for real-world commit messages.
 
-**Node.js**:
+Each pattern matches a complete line of the form `Key: Name <contact>`:
 
-The Node implementation validates RAI footers directly from the raw commit message. It does not rely on structured trailer parsing, which keeps behavior explicit and easy to reason about when debugging failed commits.
+- Recognized keys: `Authored-by`, `Commit-generated-by`, `Assisted-by`, `Co-authored-by`, `Generated-by`
+- Case-insensitive key matching
+- Requires whitespace after the colon, a non-empty name, and whitespace before `<contact>`
+- A footer cannot span multiple lines (CRLF line endings are tolerated)
+- A matching line anywhere in the message satisfies the rule
 
-- Scans commit messages using regex rules
-- Matches known RAI footer keys:
-  `Authored-by`, `Commit-generated-by`, `Assisted-by`, `Co-authored-by`, `Generated-by`
-- Requires a readable name followed by contact info in angle brackets
-  (`Name <contact>`)
+The Node plugin (`packages/node-commitlint/src/rules/rai-footer-exists.ts`) and the Python plugin (`packages/python-gitlint/gitlint_rai/rules.py`) build their patterns from the same key list and pattern template. A parity test in the Python suite (`test_pattern_parity_with_node_plugin`) fails if the two sources drift.
 
-**Python**:
-
-The Python implementation intentionally mirrors Node’s behavior instead of relying on gitlint’s structured trailer parser. This keeps validation rules predictable across ecosystems and avoids subtle differences in how trailers are interpreted.
-
-- Scans commit messages using regex rules
-- Accepts the same footer keys as Node:
-  `Authored-by`, `Commit-generated-by`, `Assisted-by`, `Co-authored-by`, `Generated-by`
-- Requires a human-readable name followed by contact info in angle brackets
-  (`Name <contact>`)
-
-All patterns require:
-
-- Case-insensitive matching
-- Name followed by contact in angle brackets (`Name <contact>`)
-- Valid Git trailer format
+One known nuance: the inputs differ slightly. Node validates the raw commit message, while gitlint strips comment lines and scissors content (`git commit -v` diffs) before rules run. A footer inside that stripped region counts for commitlint but not for gitlint.

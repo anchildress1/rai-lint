@@ -64,31 +64,26 @@ def check_licenses(data, allowed):
 
 
 def license_allowed(lic, allowed):
-    """Return True if license value `lic` matches any allowed id.
+    """Return True if license value `lic` matches an allowed id exactly.
 
     - `lic` can be None, a string, or a list/iterable.
     - `allowed` is a set of allowed identifiers (case-insensitive).
+    - Matching is whole-token only: substring matches like 'mit' in
+      'limited' passed the old check, and UNKNOWN fails closed.
     """
-    if lic == 'UNKNOWN':
-        return True
-
     if lic is None:
         return False
 
-    # Normalize allowed to lowercase tokens for substring matching
     allowed_lc = {a.lower() for a in allowed if a}
 
-    # Normalize license value(s) to a list of strings
     if isinstance(lic, (list, tuple)):
         items = [str(x).lower() for x in lic if x]
     else:
         items = [str(lic).lower()]
 
-    # For each item, build a token list and check any allowed token appears
     for item in items:
-        s = item
-        tokens = re.split(r"[^a-z0-9.-]+", s)
-        if any(a in s or a in tokens for a in allowed_lc):
+        tokens = re.split(r"[^a-z0-9.-]+", item)
+        if any(a in tokens for a in allowed_lc):
             return True
     return False
 
@@ -105,7 +100,7 @@ def main():
         'BSD-3-Clause', 'BSD-2-Clause', 'BSD',
         'ISC',
         'Python-2.0', 'Python',
-        'LicenseRef-PolyForm-Shield-1.0.0', 'PolyForm', 'Shield'
+        'LicenseRef-PolyForm-Shield-1.0.0',
     }
 
     data = load_data(json_file)
