@@ -69,7 +69,7 @@ jobs:
           path: artifacts/commitlint-test-results.zip
           retention-days: 60
 
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v6.3.0
         with:
           python-version: "3.13"
 
@@ -139,7 +139,7 @@ jobs:
 
       - name: Generate build attestation
         id: attest
-        uses: actions/attest-build-provenance@v4.1.0
+        uses: actions/attest-build-provenance@v4.1.1
         with:
           subject-path: |
             packages/node-commitlint/dist/**/*
@@ -190,7 +190,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.0
 
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v6.3.0
         with:
           python-version: "3.13"
 
@@ -224,7 +224,7 @@ jobs:
 
       - name: Generate build attestation
         id: attest
-        uses: actions/attest-build-provenance@v4.1.0
+        uses: actions/attest-build-provenance@v4.1.1
         with:
           subject-path: packages/python-gitlint/dist/*
 
