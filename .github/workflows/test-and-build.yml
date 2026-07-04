@@ -157,8 +157,10 @@ jobs:
       - name: Build workspace plugin
         run: npm run build --workspace commitlint-plugin-rai
 
+      # origin/<base> scopes the lint to branch-unique commits; base.sha
+      # ranges re-lint history merged in from the base branch
       - name: Lint PR commit messages
-        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}
+        run: npx commitlint --from origin/${{ github.event.pull_request.base.ref }} --to ${{ github.event.pull_request.head.sha }}
 
   dependency-review:
     name: Dependency Review
