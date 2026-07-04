@@ -3,9 +3,10 @@ name: Security Audit
 on:
   schedule:
     - cron: "34 3 12,26 * *" # On the 12th and 26th of every month at 3:34 AM
+  # every merge to main gets a fresh CodeQL/Trivy analysis so the default
+  # branch never goes stale between the scheduled runs
   push:
-    paths:
-      - .github/workflows/security-audit.yml
+    branches: [main]
   # License Compliance also runs on PRs that touch dependency files;
   # the other jobs are guarded with github.event_name != 'pull_request'
   pull_request:
