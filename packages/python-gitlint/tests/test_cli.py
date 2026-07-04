@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -5,6 +6,15 @@ from pathlib import Path
 import pytest
 
 from gitlint_rai.__main__ import RULES_PATH, main
+
+# lets `-m gitlint_rai` resolve in subprocesses when the project runs from
+# source (CI installs with --no-install-project)
+SUBPROCESS_ENV = {
+    **os.environ,
+    "PYTHONPATH": os.pathsep.join(
+        p for p in [str(Path(RULES_PATH).parent), os.environ.get("PYTHONPATH")] if p
+    ),
+}
 
 VALID_MESSAGE = (
     "feat: add a thing\n"
@@ -63,6 +73,7 @@ def run_cli(tmp_path, message):
     return subprocess.run(
         [sys.executable, "-m", "gitlint_rai", "--msg-filename", str(msg_file)],
         cwd=tmp_path,
+        env=SUBPROCESS_ENV,
         capture_output=True,
         text=True,
     )

@@ -92,7 +92,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          uv sync --locked --no-dev --directory packages/python-gitlint/
+          uv sync --locked --no-dev --no-build --no-install-project --directory packages/python-gitlint/
 
       - name: Self-test license checker
         run: python3 .github/scripts/test_check_licenses.py
@@ -108,6 +108,7 @@ jobs:
           mkdir -p reports
           uvx --no-build --from cyclonedx-bom==7.1.0 cyclonedx-py environment \
             .venv/bin/python3 \
+            --pyproject pyproject.toml \
             --mc-type library \
             --output-reproducible \
             --of JSON \

@@ -95,13 +95,13 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/python-gitlint
-        run: uv sync --locked --group dev
+        run: uv sync --locked --group dev --no-build --no-install-project
 
       - name: Run Black and isort
         working-directory: packages/python-gitlint
         run: |
-          uv run --frozen black --check gitlint_rai tests/
-          uv run --frozen isort --check-only gitlint_rai tests/
+          uv run --frozen --no-build --no-sync black --check gitlint_rai tests/
+          uv run --frozen --no-build --no-sync isort --check-only gitlint_rai tests/
 
       - name: Create reports directory
         working-directory: packages/python-gitlint
@@ -110,7 +110,7 @@ jobs:
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
         run: |
-          uv run --frozen pytest \
+          uv run --frozen --no-build --no-sync pytest \
             --cov \
             --cov-report=xml \
             --cov-report=term-missing

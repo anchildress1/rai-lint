@@ -50,6 +50,16 @@ dev = [
     "wheel",
 ]
 
+# CI-only resolution override: gitlint pins sh<2.0, whose only artifact is
+# an sdist — building it would defeat `uv sync --no-build` in workflows.
+# sh 2.x ships wheels; the suite (including real-gitlint subprocess runs)
+# gates that the override stays compatible. User installs are unaffected —
+# published metadata still defers to gitlint's own pins.
+[tool.uv]
+override-dependencies = ["sh>=2.0 ; sys_platform != 'win32'"]
+# wait out newly published versions before resolving them
+exclude-newer = "7 days"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["gitlint_rai*"]
@@ -93,6 +103,8 @@ output = "reports/coverage.xml"
 [tool.pytest.ini_options]
 addopts = "--junitxml=reports/junit-py.xml --cov=gitlint_rai --cov-report=term-missing"
 testpaths = ["tests"]
+# lets CI test straight from source (uv sync --no-build --no-install-project)
+pythonpath = ["."]
 
 [tool.black]
 line-length = 100

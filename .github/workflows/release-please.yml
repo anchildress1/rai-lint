@@ -80,11 +80,11 @@ jobs:
 
       - name: Install Python dependencies
         working-directory: packages/python-gitlint
-        run: uv sync --frozen --group dev
+        run: uv sync --frozen --group dev --no-build --no-install-project
 
       - name: Run Python tests with coverage
         working-directory: packages/python-gitlint
-        run: uv run --frozen pytest --cov --cov-report=term --cov-report=xml
+        run: uv run --frozen --no-build --no-sync pytest --cov --cov-report=term --cov-report=xml
 
       - name: Zip Python test results
         working-directory: packages/python-gitlint
@@ -201,7 +201,7 @@ jobs:
 
       - name: Install prod-only dependencies
         working-directory: packages/python-gitlint
-        run: uv sync --frozen --no-dev
+        run: uv sync --frozen --no-dev --no-build --no-install-project
 
       - name: Generate SBOM
         id: sbom
