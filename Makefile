@@ -73,7 +73,7 @@ test-python:
 lint: lint-format lint-node lint-python
 
 lint-format:
-	npm run format
+	npm run format:check
 
 lint-node:
 	cd $(NODE_PKG) && npm run lint

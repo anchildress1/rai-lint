@@ -7,14 +7,14 @@
     "packages/node-commitlint"
   ],
   "engines": {
-    "node": ">=20 <27"
+    "node": ">=22 <27"
   },
   "scripts": {
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,json,md}\"",
-    "postinstall": "node --input-type=module -e \"import pkg from './package.json' with { type: 'json' }; process.exit(pkg.private ? 0 : 1);\" && npx lefthook install || true"
+    "postinstall": "npx lefthook install"
   },
   "devDependencies": {
     "commitlint-plugin-rai": "^0.1.6",
@@ -26,10 +26,10 @@
     "dotenv-cli": "^11.0.0",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-eslint-comments": "^3.2.0",
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.7.2",
     "globals": "^17.6.0",
     "lefthook": "^2.1.9",
-    "markdownlint-cli2": "^0.22.1",
+    "markdownlint-cli2": "^0.23.0",
     "prettier": "^3.9.3",
     "sonar-scanner": "^3.1.0",
     "vitest": "^4.1.9"
