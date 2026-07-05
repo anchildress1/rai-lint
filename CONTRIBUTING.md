@@ -83,8 +83,8 @@ Follow Conventional Commits specification:
 
 <footer>
 
-Signed-off-by: Your Name <you@example.com>
 <rai-footer>
+Signed-off-by: Your Name <you@example.com>
 ```
 
 Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`
