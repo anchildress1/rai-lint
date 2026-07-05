@@ -19,6 +19,13 @@
   },
   "include-component-in-tag": true,
   "include-v-in-tag": true,
-  "separate-pull-requests": true,
-  "plugins": ["sentence-case"]
+  "separate-pull-requests": false,
+  "plugins": [
+    "sentence-case",
+    {
+      "type": "linked-versions",
+      "groupName": "rai-lint",
+      "components": ["commitlint-plugin-rai", "gitlint-rai"]
+    }
+  ]
 }
