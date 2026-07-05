@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v0.1.7...commitlint-plugin-rai-v0.1.8) (2026-07-05)
+
+
+### Features
+
+* Enforce Signed-off-by footers in both plugins ([#100](https://github.com/anchildress1/rai-lint/issues/100)) ([f512a3f](https://github.com/anchildress1/rai-lint/commit/f512a3fc15b9ad992ed739151bc5ecea6518a7e5))
+
 ## [0.1.7](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v0.1.6...commitlint-plugin-rai-v0.1.7) (2026-07-04)
 
 ### Features
