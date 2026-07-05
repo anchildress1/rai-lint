@@ -69,6 +69,41 @@ jobs:
           path: packages/node-commitlint/reports
           retention-days: 30
 
+  bundle-analysis:
+    name: Bundle Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    permissions:
+      contents: read
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v7.0.0
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: 24
+          cache: "npm"
+
+      - name: Install root dependencies (locked)
+        run: npm ci --ignore-scripts
+
+      - name: Build workspace plugin
+        run: npm run build --workspace commitlint-plugin-rai
+
+      # Dependabot and fork PRs don't receive repository secrets (even on
+      # maintainer re-runs), so gate on the token itself
+      - name: Upload bundle analysis to Codecov
+        if: env.CODECOV_TOKEN != ''
+        run: |
+          npx bundle-analyzer packages/node-commitlint/dist \
+            --bundle-name=commitlint-plugin-rai \
+            --upload-token="$CODECOV_TOKEN" \
+            --ignore-patterns="*.map"
+
   python-tests:
     name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
