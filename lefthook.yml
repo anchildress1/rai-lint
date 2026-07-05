@@ -23,7 +23,7 @@ pre-commit:
       # any platform-specific input (an existing node_modules or a stale
       # lock baseline) makes npm silently drop other platforms' optional
       # deps; only a fully clean regeneration is safe
-      run: rm -rf node_modules packages/*/node_modules package-lock.json && npm install
+      run: rm -rf node_modules packages/*/node_modules package-lock.json && npm install --ignore-scripts
       stage_fixed: true
     update-uv-lock:
       glob: "packages/python-gitlint/pyproject.toml"
