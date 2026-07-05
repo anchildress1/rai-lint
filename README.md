@@ -299,7 +299,7 @@ Use it. Break it. Fix it. Ship it in your CI pipeline at work. Bake it into a pr
 
 What I'm _not_ cool with? Someone spinning this up as "AI Lint Pro" with a $99/month subscription and a fancy landing page. The license already covers this: anything that's a practical substitute for this tool — a resale, a rebrand, a hosted version (paid or free) — counts as competing, and competing is the one thing Shield forbids. If you want to sell something that's basically this project, we need to have a conversation first: [anchildress1@gmail.com](mailto:anchildress1@gmail.com).
 
-One housekeeping note: if you redistribute this, keep the license (or its URL) and the `Required Notice:` line intact. That's the entire attribution ask.
+One housekeeping note: if you redistribute this, keep the license (or its URL) and any `Required Notice:` lines intact. That's the entire attribution ask.
 
 **The vibe:** This is a tool to solve a real problem — AI attribution in commits is messy, and someone needed to standardize it. If you're using it for that purpose, internal or otherwise, you're good. If you're thinking about selling it... let's chat.
 
