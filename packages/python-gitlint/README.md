@@ -2,7 +2,7 @@
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/anchildress1/admin-things/main/assets/logos/checkmark-rai-lint-logo.png"
+    src="https://raw.githubusercontent.com/anchildress1/rai-lint/main/docs/assets/rai-lint-logo.svg"
     alt="RAI Lint"
     width="160"
   />
