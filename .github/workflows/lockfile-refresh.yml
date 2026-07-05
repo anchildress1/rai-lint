@@ -99,8 +99,13 @@ jobs:
               with:
                   node-version: ${{ steps.node-version.outputs.version }}
 
+            # regenerate from scratch: re-resolving against an existing lock
+            # can drop hoisted platform-specific optional deps and break
+            # npm ci on other platforms/npm versions
             - name: Refresh npm lockfile
-              run: npm install --ignore-scripts --package-lock-only
+              run: |
+                  rm -f package-lock.json
+                  npm install --ignore-scripts --package-lock-only
 
             - name: Setup Python
               uses: actions/setup-python@v6.3.0

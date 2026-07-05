@@ -20,10 +20,10 @@ pre-commit:
       run: cd packages/python-gitlint && uv run pytest tests/ -v
     update-npm-lock:
       glob: "{package.json,packages/*/package.json}"
-      # --package-lock-only matches lockfile-refresh.yml; a plain
-      # `npm install` on macOS prunes other platforms' optional deps
-      # from the lock and breaks `npm ci` on Linux CI.
-      run: npm install --package-lock-only
+      # regenerate from scratch: re-resolving against an existing lock
+      # (on any platform) can drop hoisted platform-specific optional
+      # deps and break npm ci elsewhere
+      run: rm -f package-lock.json && npm install --ignore-scripts --package-lock-only
       stage_fixed: true
     update-uv-lock:
       glob: "packages/python-gitlint/pyproject.toml"
