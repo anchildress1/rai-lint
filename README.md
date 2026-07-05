@@ -214,11 +214,6 @@ python -c "import gitlint_rai, pathlib; print(pathlib.Path(gitlint_rai.__file__)
 <summary><b>Lefthook</b></summary>
 
 ```yaml
-pre-push:
-  commands:
-    sonar-scan:
-      run: npx dotenv -- npx sonar-scanner
-
 commit-msg:
   commands:
     commitlint:
@@ -317,6 +312,6 @@ If you find this project useful or want to support its development, consider sta
 
 _Stop guessing. Start tracking._
 
-**Co-authored-by: Verdent AI & GitHub Copilot**
+**Co-authored-by: Claude, Codex, Verdent AI & GitHub Copilot**
 
 </div>
