@@ -1,11 +1,7 @@
 import type { Rule } from '@commitlint/types';
 
-// Same single-line `Key: Name <email>` shape as the attribution pattern in
-// rai-footer-exists.ts, with the same linear-time and engine-parity
-// guarantees (see the comment there for why the anchors and whitespace
-// classes are explicit). Must stay identical to the Python plugin's pattern —
-// enforced by test_signoff_pattern_parity_with_node_plugin in the Python
-// suite.
+// Same shape and engine-parity constraints as rai-footer-exists.ts. Must match
+// the Python pattern exactly (test_signoff_pattern_parity_with_node_plugin).
 const SIGNED_OFF_BY_PATTERN = new RegExp(
   String.raw`(?:^|\n)Signed-off-by:[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)`,
   'i',

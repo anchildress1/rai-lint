@@ -111,8 +111,7 @@ class TestRaiFooterExists:
         violations = rule.validate(commit)
         assert len(violations) == 1
 
-    # JS multiline ^$ would accept these; Python's would not. The explicit
-    # anchors keep both engines on the strict answer.
+    # line breaks JS multiline ^$ accepts but Python rejects — both must reject
     @pytest.mark.parametrize(
         "message",
         [
@@ -225,8 +224,7 @@ class TestRaiSignedOffBy:
         violations = signoff_rule.validate(commit)
         assert len(violations) == 1
 
-    # JS multiline ^$ would accept these; Python's would not. The explicit
-    # anchors keep both engines on the strict answer.
+    # line breaks JS multiline ^$ accepts but Python rejects — both must reject
     @pytest.mark.parametrize(
         "message",
         [

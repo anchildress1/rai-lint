@@ -71,8 +71,7 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(false);
   });
 
-  // JS multiline ^$ would accept these; Python's would not. The explicit
-  // anchors keep both engines on the strict answer.
+  // line breaks JS multiline ^$ accepts but Python rejects — both must reject
   it.each([
     ['a lone carriage-return line break', 'feat: add feature\rGenerated-by: AI <ai@example.com>'],
     ['a lone carriage-return line ending', 'feat: add feature\n\nGenerated-by: AI <ai@example.com>\rjunk'],

@@ -12,16 +12,10 @@ AI_ATTRIBUTION_KEYS = [
     "Generated-by",
 ]
 
-# The pattern requires `Key: Value` spacing (space/tab after the colon),
-# a non-empty attribution name, and a space/tab separator before `<email>`,
-# matching the documented footer format. Anchoring uses explicit
-# `(?:^|\n)`/`(?:\n|$)` instead of multiline `^$` — JS also treats
-# `\r`/`U+2028`/`U+2029` as line terminators and Python does not — and
-# `[ \t]` instead of `\s`-based classes because the engines' whitespace sets
-# differ (`U+FEFF`); every construct here behaves identically in both engines.
-# Each quantified run is disjoint from the token that follows it, keeping
-# evaluation linear (no catastrophic backtracking). Must stay identical to
-# the Node plugin's pattern — enforced by test_pattern_parity_with_node_plugin.
+# Explicit (?:^|\n)/(?:\n|$) anchors and [ \t] classes — JS and Python define
+# multiline ^$ and \s differently. Quantified runs are disjoint from the next
+# token, keeping evaluation linear. Must match the Node pattern exactly
+# (test_pattern_parity_with_node_plugin).
 AI_ATTRIBUTION_PATTERN = re.compile(
     rf"(?:^|\n)(?:{'|'.join(AI_ATTRIBUTION_KEYS)}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)",
     re.IGNORECASE,
@@ -55,11 +49,8 @@ class RaiFooterExists(CommitRule):
         return [RuleViolation(self.id, VIOLATION_MESSAGE)]
 
 
-# Same single-line `Key: Name <email>` shape as AI_ATTRIBUTION_PATTERN, with
-# the same linear-time and engine-parity guarantees (see the comment there
-# for why the anchors and whitespace classes are explicit). Must stay
-# identical to the Node plugin's pattern — enforced by
-# test_signoff_pattern_parity_with_node_plugin.
+# Same shape and engine-parity constraints as AI_ATTRIBUTION_PATTERN. Must
+# match the Node pattern exactly (test_signoff_pattern_parity_with_node_plugin).
 SIGNED_OFF_BY_PATTERN = re.compile(
     r"(?:^|\n)Signed-off-by:[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)",
     re.IGNORECASE,

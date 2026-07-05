@@ -65,8 +65,7 @@ describe('rai-signed-off-by', () => {
     expect(isValid).toBe(false);
   });
 
-  // JS multiline ^$ would accept these; Python's would not. The explicit
-  // anchors keep both engines on the strict answer.
+  // line breaks JS multiline ^$ accepts but Python rejects — both must reject
   it.each([
     ['a lone carriage-return line break', 'feat: add feature\rSigned-off-by: Jane Doe <jane@example.com>'],
     ['a lone carriage-return line ending', 'feat: add feature\n\nSigned-off-by: Jane Doe <jane@example.com>\rjunk'],
