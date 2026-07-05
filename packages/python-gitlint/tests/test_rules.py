@@ -111,6 +111,20 @@ class TestRaiFooterExists:
         violations = rule.validate(commit)
         assert len(violations) == 1
 
+    # JS multiline ^$ would accept these; Python's would not. The explicit
+    # anchors keep both engines on the strict answer.
+    @pytest.mark.parametrize(
+        "message",
+        [
+            "feat: add feature\rGenerated-by: AI <ai@example.com>",
+            "feat: add feature\n\nGenerated-by: AI <ai@example.com>\rjunk",
+            "feat: add feature\u2028Generated-by: AI <ai@example.com>",
+        ],
+    )
+    def test_engine_divergent_line_breaks(self, rule, message):
+        violations = rule.validate(create_commit(message))
+        assert len(violations) == 1
+
     def test_redos_resistance_long_trailer_value(self, rule):
         long_value = "A" * 10000
         commit = create_commit(
@@ -211,6 +225,20 @@ class TestRaiSignedOffBy:
         violations = signoff_rule.validate(commit)
         assert len(violations) == 1
 
+    # JS multiline ^$ would accept these; Python's would not. The explicit
+    # anchors keep both engines on the strict answer.
+    @pytest.mark.parametrize(
+        "message",
+        [
+            "feat: add feature\rSigned-off-by: Jane Doe <jane@example.com>",
+            "feat: add feature\n\nSigned-off-by: Jane Doe <jane@example.com>\rjunk",
+            "feat: add feature\u2028Signed-off-by: Jane Doe <jane@example.com>",
+        ],
+    )
+    def test_engine_divergent_line_breaks(self, signoff_rule, message):
+        violations = signoff_rule.validate(create_commit(message))
+        assert len(violations) == 1
+
     def test_redos_resistance_long_name(self, signoff_rule):
         long_value = "A" * 10000
         commit = create_commit(
@@ -251,19 +279,19 @@ def test_pattern_parity_with_node_plugin():
     node_keys = re.findall(r"'([^']+)'", keys_block.group(1))
     assert node_keys == AI_ATTRIBUTION_KEYS
 
-    # The 'im' flags are part of the match so dropping either flag in the
-    # Node source fails this test, not just changes to the pattern text.
+    # The 'i' flag (and the absence of 'm') is part of the match so flag
+    # changes in the Node source fail this test, not just pattern-text edits.
     # String.raw means the template text is the literal pattern — no unescaping.
     template = re.search(
-        r"new RegExp\(\s*String\.raw`\^\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`,\s*'im',?\s*\)",
+        r"new RegExp\(\s*String\.raw`\(\?:\^\|\\n\)\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`,\s*'i',?\s*\)",
         source,
     )
-    assert template, "pattern template with 'im' flags not found in Node plugin source"
+    assert template, "pattern template with 'i' flag not found in Node plugin source"
     node_suffix = template.group(1)
-    python_suffix = AI_ATTRIBUTION_PATTERN.pattern.split(")", 1)[1]
+    python_suffix = AI_ATTRIBUTION_PATTERN.pattern.split(")", 2)[2]
     assert node_suffix == python_suffix
     assert AI_ATTRIBUTION_PATTERN.flags & re.IGNORECASE
-    assert AI_ATTRIBUTION_PATTERN.flags & re.MULTILINE
+    assert not AI_ATTRIBUTION_PATTERN.flags & re.MULTILINE
 
 
 def test_message_parity_with_node_plugin():
@@ -280,18 +308,18 @@ def test_signoff_pattern_parity_with_node_plugin():
     """Both plugins promise identical sign-off validation; fail loudly on drift."""
     source = NODE_SIGNOFF_RULE_SOURCE.read_text()
 
-    # The 'im' flags are part of the match so dropping either flag in the
-    # Node source fails this test, not just changes to the pattern text.
+    # The 'i' flag (and the absence of 'm') is part of the match so flag
+    # changes in the Node source fail this test, not just pattern-text edits.
     # String.raw means the template text is the literal pattern — no unescaping.
     template = re.search(
-        r"new RegExp\(\s*String\.raw`(.*?)`,\s*'im',?\s*\)",
+        r"new RegExp\(\s*String\.raw`(.*?)`,\s*'i',?\s*\)",
         source,
         re.DOTALL,
     )
-    assert template, "pattern template with 'im' flags not found in Node plugin source"
+    assert template, "pattern template with 'i' flag not found in Node plugin source"
     assert template.group(1) == SIGNED_OFF_BY_PATTERN.pattern
     assert SIGNED_OFF_BY_PATTERN.flags & re.IGNORECASE
-    assert SIGNED_OFF_BY_PATTERN.flags & re.MULTILINE
+    assert not SIGNED_OFF_BY_PATTERN.flags & re.MULTILINE
 
 
 def test_signoff_message_parity_with_node_plugin():

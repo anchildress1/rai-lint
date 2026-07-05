@@ -10,17 +10,20 @@ const AI_ATTRIBUTION_KEYS = [
   'Generated-by',
 ];
 
-// The pattern requires `Key: Value` spacing (whitespace after the colon),
-// a non-empty attribution name, and a whitespace separator before `<email>`,
-// matching the documented footer format. `\r\n` are excluded from the
-// name/email runs so a footer cannot match across lines (`\r?$` only tolerates
-// a CRLF line ending), and each quantified run is disjoint from the token
-// that follows it, keeping evaluation linear (no catastrophic backtracking).
-// Must stay identical to the Python plugin's pattern — enforced by
+// The pattern requires `Key: Value` spacing (space/tab after the colon),
+// a non-empty attribution name, and a space/tab separator before `<email>`,
+// matching the documented footer format. Anchoring uses explicit
+// `(?:^|\n)`/`(?:\n|$)` instead of multiline `^$` — JS also treats
+// `\r`/`U+2028`/`U+2029` as line terminators and Python does not — and
+// `[ \t]` instead of `\s`-based classes because the engines' whitespace sets
+// differ (`U+FEFF`); every construct here behaves identically in both engines.
+// Each quantified run is disjoint from the token that follows it, keeping
+// evaluation linear (no catastrophic backtracking). Must stay identical to
+// the Python plugin's pattern — enforced by
 // test_pattern_parity_with_node_plugin in the Python suite.
 const AI_ATTRIBUTION_PATTERN = new RegExp(
-  String.raw`^(?:${AI_ATTRIBUTION_KEYS.join('|')}):[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>\r?$`,
-  'im',
+  String.raw`(?:^|\n)(?:${AI_ATTRIBUTION_KEYS.join('|')}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)`,
+  'i',
 );
 
 const VIOLATION_MESSAGE =
