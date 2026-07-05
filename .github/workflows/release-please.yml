@@ -11,11 +11,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # tag creation is gated on the test job, which only runs on release-PR
-  # merges; ordinary pushes skip it and this job just does PR bookkeeping
+  # hard-gated on green tests: a red main can neither tag nor publish
   release-please:
     needs: test
-    if: ${{ !cancelled() && (needs.test.result == 'success' || needs.test.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 7
     permissions:
@@ -36,11 +34,9 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  # runs before release-please so a red main can never tag a release, but
-  # only on release-PR merges (squash-only repo: the head commit message is
-  # the PR title) — ordinary pushes are already covered by test-and-build
+  # runs unconditionally on every main push — no commit-message matching, so
+  # release-PR title changes can never silently bypass the gate
   test:
-    if: "startsWith(github.event.head_commit.message, 'chore(main): release')"
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
