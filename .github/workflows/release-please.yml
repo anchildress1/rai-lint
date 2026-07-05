@@ -11,11 +11,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # tag creation is gated on the test job, which only runs on release-PR
-  # merges; ordinary pushes skip it and this job just does PR bookkeeping
+  # hard-gated on green tests: a red main can neither tag nor publish
   release-please:
     needs: test
-    if: ${{ !cancelled() && (needs.test.result == 'success' || needs.test.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 7
     permissions:
@@ -36,12 +34,9 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  # runs before release-please so a red main can never tag a release, but
-  # only on release-PR merges (squash-only repo: the head commit message is
-  # the PR title) — ordinary pushes are already covered by test-and-build.
-  # linked-versions groups both packages into one PR titled 'chore: release main'
+  # runs unconditionally on every main push — no commit-message matching, so
+  # release-PR title changes can never silently bypass the gate
   test:
-    if: "startsWith(github.event.head_commit.message, 'chore: release main')"
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
@@ -111,8 +106,7 @@ jobs:
     needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # !cancelled() stops a skipped ancestor (test) from cascading a skip here
-    if: ${{ !cancelled() && needs.release-please.result == 'success' && needs.release-please.outputs.node_release_created == 'true' }}
+    if: ${{ needs.release-please.outputs.node_release_created == 'true' }}
     permissions:
       contents: write
       id-token: write
@@ -189,8 +183,7 @@ jobs:
     needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 7
-    # !cancelled() stops a skipped ancestor (test) from cascading a skip here
-    if: ${{ !cancelled() && needs.release-please.result == 'success' && needs.release-please.outputs.python_release_created == 'true' }}
+    if: ${{ needs.release-please.outputs.python_release_created == 'true' }}
     permissions:
       contents: write
       id-token: write
