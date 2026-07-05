@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   release-please:
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 7
     permissions:
@@ -32,11 +33,10 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
+  # runs before release-please so a red main can never tag a release
   test:
-    needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
     permissions:
       contents: read
     steps:
@@ -101,7 +101,7 @@ jobs:
           retention-days: 60
 
   release-node:
-    needs: [release-please, test]
+    needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: ${{ needs.release-please.outputs.node_release_created == 'true' }}
@@ -178,7 +178,7 @@ jobs:
             --clobber
 
   release-python:
-    needs: [release-please, test]
+    needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 7
     if: ${{ needs.release-please.outputs.python_release_created == 'true' }}
