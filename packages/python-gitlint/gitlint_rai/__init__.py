@@ -1,3 +1,3 @@
-from gitlint_rai.rules import RaiFooterExists
+from gitlint_rai.rules import RaiFooterExists, RaiSignedOffBy
 
-__all__ = ["RaiFooterExists"]
+__all__ = ["RaiFooterExists", "RaiSignedOffBy"]

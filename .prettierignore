@@ -1,0 +1,3 @@
+# release-please generates changelogs with its own bullet style; prettier
+# rewriting them creates permanent churn between releases
+**/CHANGELOG.md

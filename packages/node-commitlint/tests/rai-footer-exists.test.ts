@@ -71,6 +71,16 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(false);
   });
 
+  // line breaks JS multiline ^$ accepts but Python rejects — both must reject
+  it.each([
+    ['a lone carriage-return line break', 'feat: add feature\rGenerated-by: AI <ai@example.com>'],
+    ['a lone carriage-return line ending', 'feat: add feature\n\nGenerated-by: AI <ai@example.com>\rjunk'],
+    ['a U+2028 line separator', 'feat: add feature\u2028Generated-by: AI <ai@example.com>'],
+  ])('should not match across %s', (_label, message) => {
+    const [isValid] = validate(message);
+    expect(isValid).toBe(false);
+  });
+
   it('should stay linear on a long attribution name', () => {
     const [isValid] = validate(`feat: add feature\n\nGenerated-by: ${'A'.repeat(10000)} <test@example.com>`);
     expect(isValid).toBe(true);

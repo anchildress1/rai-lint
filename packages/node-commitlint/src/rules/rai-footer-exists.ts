@@ -10,17 +10,13 @@ const AI_ATTRIBUTION_KEYS = [
   'Generated-by',
 ];
 
-// The pattern requires `Key: Value` spacing (whitespace after the colon),
-// a non-empty attribution name, and a whitespace separator before `<email>`,
-// matching the documented footer format. `\r\n` are excluded from the
-// name/email runs so a footer cannot match across lines (`\r?$` only tolerates
-// a CRLF line ending), and each quantified run is disjoint from the token
-// that follows it, keeping evaluation linear (no catastrophic backtracking).
-// Must stay identical to the Python plugin's pattern — enforced by
-// test_pattern_parity_with_node_plugin in the Python suite.
+// Explicit (?:^|\n)/(?:\n|$) anchors and [ \t] classes — JS and Python define
+// multiline ^$ and \s differently. Quantified runs are disjoint from the next
+// token, keeping evaluation linear. Must match the Python pattern exactly
+// (test_pattern_parity_with_node_plugin).
 const AI_ATTRIBUTION_PATTERN = new RegExp(
-  String.raw`^(?:${AI_ATTRIBUTION_KEYS.join('|')}):[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>\r?$`,
-  'im',
+  String.raw`(?:^|\n)(?:${AI_ATTRIBUTION_KEYS.join('|')}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)`,
+  'i',
 );
 
 const VIOLATION_MESSAGE =

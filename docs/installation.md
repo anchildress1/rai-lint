@@ -39,8 +39,8 @@ export default {
   plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
-    // Optional but recommended for complete accountability:
-    // 'signed-off-by': [2, 'always'],
+    // Requires the Signed-off-by footer from `git commit -s`:
+    'rai-signed-off-by': [2, 'always'],
   },
 };
 ```
@@ -104,8 +104,9 @@ For plain `gitlint`, point `.gitlint` at the installed package:
 [general]
 extra-path=/path/to/site-packages/gitlint_rai
 
-# Optional but recommended for complete accountability:
-# contrib=contrib-body-requires-signed-off-by
+# Both RAI rules load automatically: rai-footer-exists (UC1) and
+# rai-signed-off-by (UC2). To skip sign-off enforcement:
+# ignore=rai-signed-off-by
 ```
 
 Get that path with:
@@ -169,7 +170,7 @@ chmod +x .git/hooks/commit-msg
 Test everything with a valid commit:
 
 ```bash
-git commit -m "test: verify RAI lint setup
+git commit -s -m "test: verify RAI lint setup
 
 Assisted-by: GitHub Copilot <copilot@github.com>"
 ```

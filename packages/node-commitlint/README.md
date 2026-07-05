@@ -2,7 +2,7 @@
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/anchildress1/admin-things/main/assets/logos/checkmark-rai-lint-logo.png"
+    src="https://raw.githubusercontent.com/anchildress1/rai-lint/main/docs/assets/rai-lint-logo.svg"
     alt="RAI Lint"
     width="160"
   />
@@ -33,11 +33,13 @@ export default {
   plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
+    // Requires the Signed-off-by footer from `git commit -s`:
+    'rai-signed-off-by': [2, 'always'],
   },
 };
 ```
 
-Once this is in place, commitlint will refuse to proceed until a valid RAI trailer is present.
+Once this is in place, commitlint will refuse to proceed until a valid RAI trailer is present — and, with `rai-signed-off-by` enabled, a `Signed-off-by: Your Name <email>` footer too.
 
 ## Valid Trailers 📌
 

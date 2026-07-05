@@ -16,13 +16,15 @@ SUBPROCESS_ENV = {
     ),
 }
 
-VALID_MESSAGE = (
+UNSIGNED_MESSAGE = (
     "feat: add a thing\n"
     "\n"
     "A body line that satisfies the default length rules.\n"
     "\n"
     "Generated-by: GitHub Copilot <copilot@github.com>\n"
 )
+
+VALID_MESSAGE = UNSIGNED_MESSAGE + "Signed-off-by: Jane Doe <jane@example.com>\n"
 
 INVALID_MESSAGE = "feat: add a thing\n\nA body line without any attribution footer.\n"
 
@@ -80,12 +82,19 @@ def run_cli(tmp_path, message):
 
 
 class TestCliFromForeignCwd:
-    def test_missing_footer_reports_uc1(self, tmp_path):
+    def test_missing_footers_report_uc1_and_uc2(self, tmp_path):
         result = run_cli(tmp_path, INVALID_MESSAGE)
         assert result.returncode != 0
         assert "UC1" in result.stderr
+        assert "UC2" in result.stderr
 
-    def test_valid_footer_passes(self, tmp_path):
+    def test_missing_signoff_reports_uc2(self, tmp_path):
+        result = run_cli(tmp_path, UNSIGNED_MESSAGE)
+        assert result.returncode != 0
+        assert "UC2" in result.stderr
+        assert "UC1" not in result.stderr
+
+    def test_valid_footers_pass(self, tmp_path):
         result = run_cli(tmp_path, VALID_MESSAGE)
         assert result.returncode == 0, result.stderr
 

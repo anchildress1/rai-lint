@@ -2,7 +2,7 @@
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/anchildress1/admin-things/main/assets/logos/checkmark-rai-lint-logo.png"
+    src="https://raw.githubusercontent.com/anchildress1/rai-lint/main/docs/assets/rai-lint-logo.svg"
     alt="RAI Lint"
     width="160"
   />
@@ -57,7 +57,9 @@ To verify the rule loaded:
 gitlint-rai --debug
 ```
 
-Look for `rai-footer-exists` in the loaded-rules output. If you see it, the plugin is active and doing its job.
+Look for `rai-footer-exists` and `rai-signed-off-by` in the loaded-rules output. If you see them, the plugin is active and doing its job.
+
+Both rules are enforced by default: `rai-footer-exists` (UC1) requires an AI attribution trailer, and `rai-signed-off-by` (UC2) requires the `Signed-off-by: Your Name <email>` footer that `git commit -s` adds. To skip sign-off enforcement, add `ignore=rai-signed-off-by` under `[general]` in your `.gitlint`.
 
 ## Valid Trailers 📌
 

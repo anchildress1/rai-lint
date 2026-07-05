@@ -5,11 +5,10 @@ describe('plugin export', () => {
   it('should export a valid commitlint plugin', () => {
     expect(plugin).toBeDefined();
     expect(plugin.rules).toBeDefined();
-    expect(plugin.rules['rai-footer-exists']).toBeDefined();
   });
 
-  it('should have rai-footer-exists rule', () => {
-    const rule = plugin.rules['rai-footer-exists'];
+  it.each(['rai-footer-exists', 'rai-signed-off-by'])('should have %s rule', (name) => {
+    const rule = plugin.rules[name];
     expect(typeof rule).toBe('function');
   });
 });

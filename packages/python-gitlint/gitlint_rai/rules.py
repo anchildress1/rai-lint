@@ -12,17 +12,13 @@ AI_ATTRIBUTION_KEYS = [
     "Generated-by",
 ]
 
-# The pattern requires `Key: Value` spacing (whitespace after the colon),
-# a non-empty attribution name, and a whitespace separator before `<email>`,
-# matching the documented footer format. `\r\n` are excluded from the
-# name/email runs so a footer cannot match across lines (`\r?$` only tolerates
-# a CRLF line ending), and each quantified run is disjoint from the token
-# that follows it, keeping evaluation linear (no catastrophic backtracking).
-# Must stay identical to the Node plugin's pattern — enforced by
-# test_pattern_parity_with_node_plugin.
+# Explicit (?:^|\n)/(?:\n|$) anchors and [ \t] classes — JS and Python define
+# multiline ^$ and \s differently. Quantified runs are disjoint from the next
+# token, keeping evaluation linear. Must match the Node pattern exactly
+# (test_pattern_parity_with_node_plugin).
 AI_ATTRIBUTION_PATTERN = re.compile(
-    rf"^(?:{'|'.join(AI_ATTRIBUTION_KEYS)}):[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>\r?$",
-    re.IGNORECASE | re.MULTILINE,
+    rf"(?:^|\n)(?:{'|'.join(AI_ATTRIBUTION_KEYS)}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)",
+    re.IGNORECASE,
 )
 
 VIOLATION_MESSAGE = (
@@ -51,3 +47,31 @@ class RaiFooterExists(CommitRule):
         if AI_ATTRIBUTION_PATTERN.search(commit.message.full or ""):
             return []
         return [RuleViolation(self.id, VIOLATION_MESSAGE)]
+
+
+# Same shape and engine-parity constraints as AI_ATTRIBUTION_PATTERN. Must
+# match the Node pattern exactly (test_signoff_pattern_parity_with_node_plugin).
+SIGNED_OFF_BY_PATTERN = re.compile(
+    r"(?:^|\n)Signed-off-by:[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)",
+    re.IGNORECASE,
+)
+
+SIGNED_OFF_BY_VIOLATION_MESSAGE = (
+    "Commit message must include a Signed-off-by footer:\n"
+    '  "Signed-off-by: Your Name <your.email@example.com>"\n'
+    "\n"
+    "Sign-off is your human stamp confirming you reviewed and take\n"
+    "responsibility for the AI attribution. Git adds it for you with\n"
+    "`git commit -s` (or `--signoff`)."
+)
+
+
+class RaiSignedOffBy(CommitRule):
+    name = "rai-signed-off-by"
+    id = "UC2"
+    target = "commit"
+
+    def validate(self, commit):
+        if SIGNED_OFF_BY_PATTERN.search(commit.message.full or ""):
+            return []
+        return [RuleViolation(self.id, SIGNED_OFF_BY_VIOLATION_MESSAGE)]

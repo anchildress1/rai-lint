@@ -1,6 +1,10 @@
 <div align="center">
 
-![RAI Lint Banner](docs/assets/rai-lint-banner.png)
+<img
+  src="https://repository-images.githubusercontent.com/1087389578/74ea746d-e125-4aac-a098-f74336b182de"
+  alt="RAI Lint Banner"
+  width="720"
+/>
 
 **Stop playing hide-and-seek with AI in your commits.**
 
@@ -10,9 +14,9 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📊 Project Stats
 
-[![GitHub Repo Stars](https://img.shields.io/github/stars/anchildress1/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/anchildress1/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/issues) [![GitHub Release](https://img.shields.io/github/v/release/anchildress1/rai-lint?style=for-the-badge&color=EDC531)](https://github.com/anchildress1/rai-lint/releases) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/anchildress1/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/anchildress1/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/issues) [![Release](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Frai-lint%2Fmain%2F.release-please-manifest.json&query=%24%5B%27packages%2Fnode-commitlint%27%5D&prefix=v&label=release&style=for-the-badge&color=0875AE)](https://github.com/anchildress1/rai-lint/releases) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE)
 
-[![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/anchildress1_rai-lint?color=brightgreen&server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&color=orange&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint)
+[![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint)
 
 ### 🗣️ Languages
 
@@ -24,7 +28,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 🤖 AI & Automation
 
-[![Verdent AI Badge](https://img.shields.io/badge/Verdent-00D486?logo=data:image/svg%2bxml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VmVyZGVudDwvdGl0bGU+CjxwYXRoIGQ9Ik0xNy42IDkuOUMxNy42IDEyLjEgMTYuOCAxNC4yIDE1LjQgMTUuN0wxNS4xIDE2QzEzLjcgMTcuNSAxMi44IDE5LjYgMTIuOCAyMS44QzEyLjggMjIuNSAxMi45IDIzLjIgMTMuMSAyMy45QzEwLjcgMjIuOSA4LjggMjAuOSA4IDE4LjRDNy44IDE3LjYgNy43IDE2LjggNy43IDE2QzcuNyAxMy44IDguNSAxMS44IDkuOCAxMC4zTDE1LjMgNEMxNi4yIDUgMTYuOSA2LjEgMTcuMyA3LjVDMTcuNSA4LjIgMTcuNiA5IDE3LjYgOS45WiIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNMTQuMyAyMi43QzE0LjMgMjAuNSAxNS4xIDE4LjQgMTYuNSAxNi45TDE2LjggMTYuNkMxOC4yIDE1LjEgMTkuMSAxMyAxOS4xIDEwLjhDMTkuMSAxMCAxOSA5LjQgMTguOCA4LjdDMjEuMiA5LjcgMjMuMSAxMS43IDIzLjkgMTQuMkMyNCAxNSAyNC4yIDE1LjggMjQuMiAxNi42QzI0LjIgMTguOCAyMy40IDIwLjggMjIuMSAyMi4zTDE2LjYgMjguNkMxNS43IDI3LjYgMTUgMjYuNSAxNC42IDI1LjFDMTQuNCAyNC4zIDE0LjMgMjMuNSAxNC4zIDIyLjdaIiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==&style=for-the-badge)](https://verdent.ai) [![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=for-the-badge)](https://github.com/features/copilot) [![ChatGPT Badge](https://img.shields.io/badge/ChatGPT-74aa9c?style=for-the-badge)](http://chatgpt.com) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge)
+[![Verdent AI Badge](https://img.shields.io/badge/Verdent-00D486?logo=data:image/svg%2bxml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VmVyZGVudDwvdGl0bGU+CjxwYXRoIGQ9Ik0xNy42IDkuOUMxNy42IDEyLjEgMTYuOCAxNC4yIDE1LjQgMTUuN0wxNS4xIDE2QzEzLjcgMTcuNSAxMi44IDE5LjYgMTIuOCAyMS44QzEyLjggMjIuNSAxMi45IDIzLjIgMTMuMSAyMy45QzEwLjcgMjIuOSA4LjggMjAuOSA4IDE4LjRDNy44IDE3LjYgNy43IDE2LjggNy43IDE2QzcuNyAxMy44IDguNSAxMS44IDkuOCAxMC4zTDE1LjMgNEMxNi4yIDUgMTYuOSA2LjEgMTcuMyA3LjVDMTcuNSA4LjIgMTcuNiA5IDE3LjYgOS45WiIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNMTQuMyAyMi43QzE0LjMgMjAuNSAxNS4xIDE4LjQgMTYuNSAxNi45TDE2LjggMTYuNkMxOC4yIDE1LjEgMTkuMSAxMyAxOS4xIDEwLjhDMTkuMSAxMCAxOSA5LjQgMTguOCA4LjdDMjEuMiA5LjcgMjMuMSAxMS43IDIzLjkgMTQuMkMyNCAxNSAyNC4yIDE1LjggMjQuMiAxNi42QzI0LjIgMTguOCAyMy40IDIwLjggMjIuMSAyMi4zTDE2LjYgMjguNkMxNS43IDI3LjYgMTUgMjYuNSAxNC42IDI1LjFDMTQuNCAyNC4zIDE0LjMgMjMuNSAxNC4zIDIyLjdaIiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==&style=for-the-badge)](https://verdent.ai) [![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=for-the-badge)](https://github.com/features/copilot) [![ChatGPT Badge](https://img.shields.io/badge/ChatGPT-74aa9c?style=for-the-badge)](http://chatgpt.com) [![Claude Badge](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff&style=for-the-badge)](https://claude.com/claude-code) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge)
 
 ### 🔧 Quality & Standards
 
@@ -98,9 +102,9 @@ Works out-of-the-box with sensible defaults. Customize when ready.
 Every commit **must** include:
 
 1. **One AI attribution footer** (pick the one that fits)
-2. **Signed-off-by footer** (recommended for complete accountability)
+2. **Signed-off-by footer** (your human accountability stamp — `git commit -s`)
 
-> **💡 Best Practice:** While only the RAI footer is strictly enforced, combining it with `Signed-off-by` creates a complete audit trail—AI attribution plus human accountability. We strongly recommend enforcing both.
+> **💡 Complete audit trail:** AI attribution plus human accountability. `gitlint-rai` enforces both out of the box; for commitlint, enable the plugin's `rai-signed-off-by` rule alongside `rai-footer-exists`.
 
 ### AI Attribution Footers
 
@@ -154,7 +158,7 @@ Format: `Signed-off-by: Your Name <your.email@example.com>`
 > [!NOTE]
 > All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers). Email addresses **must** use angle brackets (`Name <email@example.com>`) — this is stricter than Git's spec but matches Git's own convention and ensures consistency.
 >
-> **By default, only RAI footers are enforced.** Enforce `Signed-off-by` too via commitlint's built-in `signed-off-by` rule or gitlint's `contrib-body-requires-signed-off-by` contrib rule.
+> Both plugins ship a `rai-signed-off-by` rule that enforces this footer. `gitlint-rai` enables it by default (rule id `UC2`; opt out with `ignore=rai-signed-off-by` in `.gitlint`). For commitlint, add `'rai-signed-off-by': [2, 'always']` to your rules.
 
 ---
 
@@ -174,7 +178,7 @@ export default {
   plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
-    'signed-off-by': [2, 'always'],
+    'rai-signed-off-by': [2, 'always'],
   },
 };
 ```
@@ -259,7 +263,8 @@ rai-lint/
 │   ├── node-commitlint/          # Node.js/ESM plugin
 │   │   ├── src/
 │   │   │   ├── rules/
-│   │   │   │   └── rai-footer-exists.ts
+│   │   │   │   ├── rai-footer-exists.ts
+│   │   │   │   └── rai-signed-off-by.ts
 │   │   │   └── index.ts
 │   │   |── package.json
 │   │   ├── tests/
