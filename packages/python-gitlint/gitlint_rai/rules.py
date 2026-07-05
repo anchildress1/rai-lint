@@ -51,3 +51,32 @@ class RaiFooterExists(CommitRule):
         if AI_ATTRIBUTION_PATTERN.search(commit.message.full or ""):
             return []
         return [RuleViolation(self.id, VIOLATION_MESSAGE)]
+
+
+# Same single-line `Key: Name <email>` shape as AI_ATTRIBUTION_PATTERN, with
+# the same linear-time guarantees. Must stay identical to the Node plugin's
+# pattern — enforced by test_signoff_pattern_parity_with_node_plugin.
+SIGNED_OFF_BY_PATTERN = re.compile(
+    r"^Signed-off-by:[^\S\r\n]+[^\s<][^<\r\n]*(?<=\s)<[^>\r\n]+>\r?$",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+SIGNED_OFF_BY_VIOLATION_MESSAGE = (
+    "Commit message must include a Signed-off-by footer:\n"
+    '  "Signed-off-by: Your Name <your.email@example.com>"\n'
+    "\n"
+    "Sign-off is your human stamp confirming you reviewed and take\n"
+    "responsibility for the AI attribution. Git adds it for you with\n"
+    "`git commit -s` (or `--signoff`)."
+)
+
+
+class RaiSignedOffBy(CommitRule):
+    name = "rai-signed-off-by"
+    id = "UC2"
+    target = "commit"
+
+    def validate(self, commit):
+        if SIGNED_OFF_BY_PATTERN.search(commit.message.full or ""):
+            return []
+        return [RuleViolation(self.id, SIGNED_OFF_BY_VIOLATION_MESSAGE)]

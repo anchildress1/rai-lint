@@ -98,9 +98,9 @@ Works out-of-the-box with sensible defaults. Customize when ready.
 Every commit **must** include:
 
 1. **One AI attribution footer** (pick the one that fits)
-2. **Signed-off-by footer** (recommended for complete accountability)
+2. **Signed-off-by footer** (your human accountability stamp — `git commit -s`)
 
-> **💡 Best Practice:** While only the RAI footer is strictly enforced, combining it with `Signed-off-by` creates a complete audit trail—AI attribution plus human accountability. We strongly recommend enforcing both.
+> **💡 Complete audit trail:** AI attribution plus human accountability. `gitlint-rai` enforces both out of the box; for commitlint, enable the plugin's `rai-signed-off-by` rule alongside `rai-footer-exists`.
 
 ### AI Attribution Footers
 
@@ -154,7 +154,7 @@ Format: `Signed-off-by: Your Name <your.email@example.com>`
 > [!NOTE]
 > All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers). Email addresses **must** use angle brackets (`Name <email@example.com>`) — this is stricter than Git's spec but matches Git's own convention and ensures consistency.
 >
-> **By default, only RAI footers are enforced.** Enforce `Signed-off-by` too via commitlint's built-in `signed-off-by` rule or gitlint's `contrib-body-requires-signed-off-by` contrib rule.
+> Both plugins ship a `rai-signed-off-by` rule that enforces this footer. `gitlint-rai` enables it by default (rule id `UC2`; opt out with `ignore=rai-signed-off-by` in `.gitlint`). For commitlint, add `'rai-signed-off-by': [2, 'always']` to your rules.
 
 ---
 
@@ -174,7 +174,7 @@ export default {
   plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
-    'signed-off-by': [2, 'always'],
+    'rai-signed-off-by': [2, 'always'],
   },
 };
 ```
@@ -264,7 +264,8 @@ rai-lint/
 │   ├── node-commitlint/          # Node.js/ESM plugin
 │   │   ├── src/
 │   │   │   ├── rules/
-│   │   │   │   └── rai-footer-exists.ts
+│   │   │   │   ├── rai-footer-exists.ts
+│   │   │   │   └── rai-signed-off-by.ts
 │   │   │   └── index.ts
 │   │   |── package.json
 │   │   ├── tests/

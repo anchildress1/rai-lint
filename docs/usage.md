@@ -13,11 +13,11 @@ RAI Lint enforces AI attribution in Git commit trailers. No attribution footer =
 Five footer patterns. All case-insensitive. Pick **one** that represents the **majority AI contribution**.
 
 > [!TIP]
-> While the `Signed-off-by` footer is optional, it's strongly recommended for complete accountability. It serves as YOUR human stamp confirming you reviewed and take responsibility for the AI attribution. Enforce it with commitlint's built-in `signed-off-by` rule or gitlint's `contrib-body-requires-signed-off-by` contrib rule.
+> The `Signed-off-by` footer is YOUR human stamp confirming you reviewed and take responsibility for the AI attribution. Both plugins enforce it with their own `rai-signed-off-by` rule: `gitlint-rai` enables it by default (rule id `UC2`; opt out with `ignore=rai-signed-off-by` in `.gitlint`), and commitlint enables it via `'rai-signed-off-by': [2, 'always']` in your config.
 
 ### Signed-off-by
 
-**Recommended for complete accountability.** This is YOUR stamp confirming you reviewed and take responsibility for the AI attribution.
+**Complete accountability.** This is YOUR stamp confirming you reviewed and take responsibility for the AI attribution.
 
 **Add it automatically:** `git commit -s` (or `--signoff`)
 
