@@ -2,6 +2,8 @@
 
 ## [0.1.8](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v0.1.6...gitlint-rai-v0.1.8) (2026-07-05)
 
+> ⚠️ 0.1.8 was tagged but never published to PyPI (CI publish gate bug). Use 0.1.9 instead.
+
 
 ### Features
 

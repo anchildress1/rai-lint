@@ -38,9 +38,10 @@ jobs:
 
   # runs before release-please so a red main can never tag a release, but
   # only on release-PR merges (squash-only repo: the head commit message is
-  # the PR title) — ordinary pushes are already covered by test-and-build
+  # the PR title) — ordinary pushes are already covered by test-and-build.
+  # linked-versions groups both packages into one PR titled 'chore: release main'
   test:
-    if: "startsWith(github.event.head_commit.message, 'chore(main): release')"
+    if: "startsWith(github.event.head_commit.message, 'chore: release main')"
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
@@ -110,7 +111,8 @@ jobs:
     needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: ${{ needs.release-please.outputs.node_release_created == 'true' }}
+    # !cancelled() stops a skipped ancestor (test) from cascading a skip here
+    if: ${{ !cancelled() && needs.release-please.result == 'success' && needs.release-please.outputs.node_release_created == 'true' }}
     permissions:
       contents: write
       id-token: write
@@ -187,7 +189,8 @@ jobs:
     needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 7
-    if: ${{ needs.release-please.outputs.python_release_created == 'true' }}
+    # !cancelled() stops a skipped ancestor (test) from cascading a skip here
+    if: ${{ !cancelled() && needs.release-please.result == 'success' && needs.release-please.outputs.python_release_created == 'true' }}
     permissions:
       contents: write
       id-token: write
