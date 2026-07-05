@@ -11,7 +11,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # tag creation is gated on the test job, which only runs on release-PR
+  # merges; ordinary pushes skip it and this job just does PR bookkeeping
   release-please:
+    needs: test
+    if: ${{ !cancelled() && (needs.test.result == 'success' || needs.test.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 7
     permissions:
@@ -32,11 +36,13 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
+  # runs before release-please so a red main can never tag a release, but
+  # only on release-PR merges (squash-only repo: the head commit message is
+  # the PR title) — ordinary pushes are already covered by test-and-build
   test:
-    needs: release-please
+    if: "startsWith(github.event.head_commit.message, 'chore(main): release')"
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
     permissions:
       contents: read
     steps:
@@ -101,7 +107,7 @@ jobs:
           retention-days: 60
 
   release-node:
-    needs: [release-please, test]
+    needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: ${{ needs.release-please.outputs.node_release_created == 'true' }}
@@ -178,7 +184,7 @@ jobs:
             --clobber
 
   release-python:
-    needs: [release-please, test]
+    needs: release-please
     runs-on: ubuntu-latest
     timeout-minutes: 7
     if: ${{ needs.release-please.outputs.python_release_created == 'true' }}
