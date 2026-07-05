@@ -40,7 +40,7 @@
   "license": "LicenseRef-PolyForm-Shield-1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anchildress1/rai-lint.git",
+    "url": "git+https://github.com/anchildress1/rai-lint.git",
     "directory": "packages/node-commitlint"
   },
   "bugs": {

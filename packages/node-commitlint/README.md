@@ -73,4 +73,4 @@ This plugin is the boring enforcement layer that follows.
 
 ## License 📄
 
-PolyForm Shield License 1.0.0
+[PolyForm Shield License 1.0.0](./LICENSE) — free to use anywhere, including inside commercial products. What's off the table: providing anything that competes with this tool — selling it, rebranding it, hosting it, or shipping a practical substitute, paid or free. This is a plain-language summary; the [LICENSE](./LICENSE) is what actually controls. Commercial licensing questions: [anchildress1@gmail.com](mailto:anchildress1@gmail.com).
