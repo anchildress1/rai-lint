@@ -104,16 +104,14 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ## Commit Message Structure
 
-RAI footers go at the end, after all other Git trailers:
+Footers are Git trailers in the final block of the message. Their order doesn't matter — the rules accept the RAI footer and `Signed-off-by` wherever they appear, and `git commit -s` appends `Signed-off-by` last on its own:
 
 ```
 <type>(<scope>): <subject>
 
 <body>
 
-<other-git-trailers>
-
-<rai-footer>
+<git-trailers, any order>
 ```
 
 Example with multiple trailers:
@@ -127,6 +125,7 @@ Added automatic account linking for existing users.
 BREAKING CHANGE: Removed legacy session-based authentication
 Closes #123
 Co-authored-by: GitHub Copilot <copilot@github.com>
+Signed-off-by: Jane Doe <jane@example.com>
 ```
 
 ---
