@@ -76,8 +76,6 @@ jobs:
     if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
     permissions:
       contents: read
-    env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v7.0.0
@@ -95,13 +93,26 @@ jobs:
         run: npm run build --workspace commitlint-plugin-rai
 
       # Dependabot and fork PRs don't receive repository secrets (even on
-      # maintainer re-runs), so gate on the token itself
-      # Direct bin path (not npx) so the lockfile-pinned version runs and
-      # nothing can be fetched or install scripts executed on-demand
-      - name: Upload bundle analysis to Codecov
-        if: env.CODECOV_TOKEN != ''
+      # maintainer re-runs), so gate on the token itself; the secrets context
+      # is unavailable in step-level `if`, hence the output indirection
+      - name: Check for Codecov token
+        id: codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          ./node_modules/.bin/bundle-analyzer packages/node-commitlint/dist \
+          if [ -n "$CODECOV_TOKEN" ]; then
+            echo "has-token=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The analyzer is os-restricted (darwin/linux) so it can't live in
+      # devDependencies without breaking Windows installs; CI fetches it
+      # on-demand instead, exact-pinned and with lifecycle scripts disabled
+      - name: Upload bundle analysis to Codecov
+        if: steps.codecov.outputs.has-token == 'true'
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: |
+          npx --yes --ignore-scripts @codecov/bundle-analyzer@2.0.1 packages/node-commitlint/dist \
             --bundle-name=commitlint-plugin-rai \
             --upload-token="$CODECOV_TOKEN" \
             --ignore-patterns="*.map"
