@@ -306,15 +306,10 @@ def test_signoff_pattern_parity_with_node_plugin():
     """Both plugins promise identical sign-off validation; fail loudly on drift."""
     source = NODE_SIGNOFF_RULE_SOURCE.read_text()
 
-    # The 'i' flag (and the absence of 'm') is part of the match so flag
-    # changes in the Node source fail this test, not just pattern-text edits.
-    # String.raw means the template text is the literal pattern — no unescaping.
-    template = re.search(
-        r"new RegExp\(\s*String\.raw`(.*?)`,\s*'i',?\s*\)",
-        source,
-        re.DOTALL,
-    )
-    assert template, "pattern template with 'i' flag not found in Node plugin source"
+    # The /i literal delimiters are part of the match so flag changes in the
+    # Node source fail this test, not just pattern-text edits.
+    template = re.search(r"const SIGNED_OFF_BY_PATTERN =\s*/(.*)/i;", source)
+    assert template, "pattern literal with 'i' flag not found in Node plugin source"
     assert template.group(1) == SIGNED_OFF_BY_PATTERN.pattern
     assert SIGNED_OFF_BY_PATTERN.flags & re.IGNORECASE
     assert not SIGNED_OFF_BY_PATTERN.flags & re.MULTILINE

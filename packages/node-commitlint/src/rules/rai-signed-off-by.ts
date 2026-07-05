@@ -2,10 +2,8 @@ import type { Rule } from '@commitlint/types';
 
 // Same shape and engine-parity constraints as rai-footer-exists.ts. Must match
 // the Python pattern exactly (test_signoff_pattern_parity_with_node_plugin).
-const SIGNED_OFF_BY_PATTERN = new RegExp(
-  String.raw`(?:^|\n)Signed-off-by:[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)`,
-  'i',
-);
+const SIGNED_OFF_BY_PATTERN =
+  /(?:^|\n)Signed-off-by:[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)/i;
 
 const VIOLATION_MESSAGE =
   'Commit message must include a Signed-off-by footer:\n' +
