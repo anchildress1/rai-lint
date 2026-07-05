@@ -1,6 +1,10 @@
 <div align="center">
 
-![RAI Lint Banner](docs/assets/rai-lint-banner.png)
+<img
+  src="https://repository-images.githubusercontent.com/1087389578/74ea746d-e125-4aac-a098-f74336b182de"
+  alt="RAI Lint Banner"
+  width="720"
+/>
 
 **Stop playing hide-and-seek with AI in your commits.**
 
