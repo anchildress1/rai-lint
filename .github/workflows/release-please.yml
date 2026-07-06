@@ -167,9 +167,19 @@ jobs:
 
       # Auth is OIDC trusted publishing (configured via npm trust after the
       # manual first publish) — no token, no NODE_AUTH_TOKEN
+      # skip-if-published guard keeps re-runs idempotent: npm rejects any
+      # republish of an existing version, even byte-identical
       - name: Publish to npm
         id: publish
-        run: npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
+        run: |
+          set -euo pipefail
+          NAME=$(jq -r '.name' packages/node-commitlint/package.json)
+          VERSION=$(jq -r '.version' packages/node-commitlint/package.json)
+          if npm view "${NAME}@${VERSION}" version >/dev/null 2>&1; then
+            echo "${NAME}@${VERSION} already on npm — skipping publish"
+          else
+            npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
+          fi
 
       - name: Download test results
         uses: actions/download-artifact@v8.0.1
@@ -185,6 +195,13 @@ jobs:
             artifacts/commitlint-package.zip \
             artifacts/commitlint-test-results.zip \
             --clobber
+
+      # release-please creates the release as a draft; publishing it last means
+      # immutability locks in only after all assets are attached
+      - name: Publish GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit ${{ needs.release-please.outputs.node_tag_name }} --draft=false
 
   release-python:
     needs: release-please
@@ -244,12 +261,15 @@ jobs:
           mkdir -p "${GITHUB_WORKSPACE}/artifacts"
           zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json "${GITHUB_WORKSPACE}/packages/python-gitlint/CHANGELOG.md"
 
+      # skip-existing keeps re-runs idempotent: PyPI forbids filename reuse
+      # forever, even for byte-identical files
       - name: Publish to PyPI with Trusted Publishing
         id: publish
         uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
+          skip-existing: true
 
       - name: Download test results
         uses: actions/download-artifact@v8.0.1
@@ -265,3 +285,10 @@ jobs:
             "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" \
             artifacts/gitlint-test-results.zip \
             --clobber
+
+      # release-please creates the release as a draft; publishing it last means
+      # immutability locks in only after all assets are attached
+      - name: Publish GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit ${{ needs.release-please.outputs.python_tag_name }} --draft=false
