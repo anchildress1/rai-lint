@@ -199,8 +199,8 @@ ls -la .git/hooks/commit-msg
 # Check exact bytes
 echo "Generated-by: GitHub Copilot <copilot@github.com>" | xxd
 
-# Test the pattern
-printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\n' | npx --no-install commitlint
+# Test the configured rules
+printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Jane Doe <jane@example.com>\n' | npx --no-install commitlint
 ```
 
 ---
@@ -240,6 +240,7 @@ Generated-by: GitHub Copilot <copilot@github.com>
 feat: add feature
 
 Generated-by: GitHub Copilot <copilot@github.com>
+Signed-off-by: Jane Doe <jane@example.com>
 ```
 
 ---
@@ -309,7 +310,7 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ```bash
 # Test a commit message
-printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\n' | npx --no-install commitlint
+printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Jane Doe <jane@example.com>\n' | npx --no-install commitlint
 
 # Verbose output
 npx --no-install commitlint --verbose --edit .git/COMMIT_EDITMSG
@@ -325,7 +326,7 @@ npx --no-install commitlint --print-config
 
 ```bash
 # Test a commit message
-printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\n' | gitlint-rai
+printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Jane Doe <jane@example.com>\n' | gitlint-rai
 
 # Verbose output
 gitlint-rai --verbose
