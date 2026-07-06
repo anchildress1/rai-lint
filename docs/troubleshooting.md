@@ -235,6 +235,7 @@ ignore=rai-signed-off-by
 # ❌ Wrong (no blank line)
 feat: add feature
 Generated-by: GitHub Copilot <copilot@github.com>
+Signed-off-by: Jane Doe <jane@example.com>
 
 # ✅ Right (blank line before footer)
 feat: add feature
