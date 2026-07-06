@@ -2,7 +2,7 @@
 
 ## [0.1.8](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v0.1.7...commitlint-plugin-rai-v0.1.8) (2026-07-05)
 
-> ⚠️ 0.1.8 was tagged but never published to npm (CI publish gate bug). Use 0.1.9 instead.
+> ⚠️ 0.1.8 was tagged but never published to npm (CI publish gate bug). Use 1.0.0 instead.
 
 
 ### Features

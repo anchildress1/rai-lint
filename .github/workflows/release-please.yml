@@ -55,6 +55,9 @@ jobs:
       - name: Install Node dependencies
         run: npm ci --ignore-scripts
 
+      - name: Build Node package
+        run: npm --workspace=packages/node-commitlint run build
+
       - name: Run Node tests
         run: npm --workspace=packages/node-commitlint test
 
@@ -83,6 +86,10 @@ jobs:
       - name: Install Python dependencies
         working-directory: packages/python-gitlint
         run: uv sync --frozen --group dev --no-build --no-install-project
+
+      - name: Build Python package
+        working-directory: packages/python-gitlint
+        run: uv build
 
       - name: Run Python tests with coverage
         working-directory: packages/python-gitlint

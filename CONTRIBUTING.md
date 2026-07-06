@@ -36,7 +36,7 @@ make test
 make build
 
 # For AI validation, instruct the agent to confirm results with
-maake ai-checks
+make ai-checks
 ```
 
 ## Running Tests
@@ -84,9 +84,17 @@ Follow Conventional Commits specification:
 <footer>
 
 <rai-footer>
+Signed-off-by: Your Name <you@example.com>
 ```
 
 Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`
+
+### Sign-off
+
+Every commit must carry a DCO-style `Signed-off-by` footer — use `git commit -s` and it's
+handled for you. This is the same footer the `rai-signed-off-by` rule in both plugins enforces.
+The template line above is what `-s` produces — don't also type it by hand or you'll end up
+with two.
 
 ## Pull Request Process
 
@@ -94,7 +102,7 @@ Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`
 2. Create a feature branch
 3. Make your changes
 4. Run tests and linting
-5. Commit with proper RAI footer
+5. Commit with sign-off (`git commit -s`) and proper RAI footer
 6. Push to your fork
 7. Open a pull request
 

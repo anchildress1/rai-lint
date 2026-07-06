@@ -7,7 +7,7 @@ I'm moving fast. If you're not on the latest version, you're on your own.
 | Version | Supported          |
 | ------- | ------------------ |
 | Latest  | :white_check_mark: |
-| < 0.1.0 | :x:                |
+| < 1.0.0 | :x:                |
 
 ## Reporting a Vulnerability
 

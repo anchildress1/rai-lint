@@ -32,6 +32,7 @@ export default {
   plugins: ['commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
+    'rai-signed-off-by': [2, 'always'],
   },
 };
 ```
@@ -200,6 +201,26 @@ echo "Generated-by: GitHub Copilot <copilot@github.com>" | xxd
 
 # Test the pattern
 printf 'feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>\n' | npx --no-install commitlint
+```
+
+---
+
+### "Commit message must include a Signed-off-by footer"
+
+**What happened**: The `rai-signed-off-by` rule is on and your commit has no sign-off.
+
+**Fix it**: Let Git add it:
+
+```bash
+git commit -s -m "..."          # new commit
+git commit --amend -s --no-edit # fix the last one
+```
+
+**Opt out**: drop `'rai-signed-off-by'` from your commitlint rules, or for the Python side add to `.gitlint`:
+
+```ini
+[general]
+ignore=rai-signed-off-by
 ```
 
 ---
