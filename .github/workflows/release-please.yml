@@ -55,11 +55,11 @@ jobs:
       - name: Install Node dependencies
         run: npm ci --ignore-scripts
 
-      - name: Run Node tests
-        run: npm --workspace=packages/node-commitlint test
-
       - name: Build Node package
         run: npm --workspace=packages/node-commitlint run build
+
+      - name: Run Node tests
+        run: npm --workspace=packages/node-commitlint test
 
       - name: Zip Node test results
         run: |
@@ -87,13 +87,13 @@ jobs:
         working-directory: packages/python-gitlint
         run: uv sync --frozen --group dev --no-build --no-install-project
 
-      - name: Run Python tests with coverage
-        working-directory: packages/python-gitlint
-        run: uv run --frozen --no-build --no-sync pytest --cov --cov-report=term --cov-report=xml
-
       - name: Build Python package
         working-directory: packages/python-gitlint
         run: uv build
+
+      - name: Run Python tests with coverage
+        working-directory: packages/python-gitlint
+        run: uv run --frozen --no-build --no-sync pytest --cov --cov-report=term --cov-report=xml
 
       - name: Zip Python test results
         working-directory: packages/python-gitlint
