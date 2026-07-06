@@ -17,6 +17,10 @@
   That’s it. No philosophy, no negotiations. Pick a trailer and move on.
 </p>
 
+<p align="center">
+  ⭐ Found this useful? <a href="https://github.com/anchildress1/rai-lint">Star the repo</a>.
+</p>
+
 ## Installation 🔧
 
 ```bash
