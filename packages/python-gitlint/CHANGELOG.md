@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v1.0.0...gitlint-rai-v1.0.1) (2026-07-06)
+
+
+### Documentation
+
+* Add star-the-repo CTA to pypi and npm package READMEs ([#108](https://github.com/anchildress1/rai-lint/issues/108)) ([6890123](https://github.com/anchildress1/rai-lint/commit/68901236afc7ed5946c8d3c73e10eb7b1f83ba83))
+
 ## [1.0.0](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v0.1.8...gitlint-rai-v1.0.0) (2026-07-06)
 
 
