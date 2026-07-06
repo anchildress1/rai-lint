@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.0](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v0.1.8...commitlint-plugin-rai-v1.0.0) (2026-07-06)
+
+
+### Bug Fixes
+
+* Repair release publish gate for grouped release PRs ([#102](https://github.com/anchildress1/rai-lint/issues/102)) ([0ce5837](https://github.com/anchildress1/rai-lint/commit/0ce58374923b3aad96f368e94a43abe5e22448c7))
+
+
+### Miscellaneous Chores
+
+* Release 1.0.0 ([3f89319](https://github.com/anchildress1/rai-lint/commit/3f89319060bceecc16bab2dd76504a0333f08b82))
+
 ## [0.1.8](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v0.1.7...commitlint-plugin-rai-v0.1.8) (2026-07-05)
 
 > ⚠️ 0.1.8 was tagged but never published to npm (CI publish gate bug). Use 1.0.0 instead.
