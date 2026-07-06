@@ -175,10 +175,15 @@ jobs:
           set -euo pipefail
           NAME=$(jq -r '.name' packages/node-commitlint/package.json)
           VERSION=$(jq -r '.version' packages/node-commitlint/package.json)
-          if npm view "${NAME}@${VERSION}" version >/dev/null 2>&1; then
+          # publish only on a confirmed-missing version; transient registry
+          # errors must fail loudly, not fall through to a doomed publish
+          if OUT=$(npm view "${NAME}@${VERSION}" version 2>&1); then
             echo "${NAME}@${VERSION} already on npm — skipping publish"
-          else
+          elif grep -q "E404" <<<"$OUT"; then
             npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
+          else
+            echo "$OUT" >&2
+            exit 1
           fi
 
       - name: Download test results
