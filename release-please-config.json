@@ -17,6 +17,7 @@
       "bump-patch-for-minor-pre-major": true
     }
   },
+  "release-as": "1.0.0",
   "include-component-in-tag": true,
   "include-v-in-tag": true,
   "separate-pull-requests": false,
