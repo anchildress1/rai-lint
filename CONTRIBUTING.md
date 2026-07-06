@@ -93,6 +93,8 @@ Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`
 
 Every commit must carry a DCO-style `Signed-off-by` footer — use `git commit -s` and it's
 handled for you. This is the same footer the `rai-signed-off-by` rule in both plugins enforces.
+The template line above is what `-s` produces — don't also type it by hand or you'll end up
+with two.
 
 ## Pull Request Process
 

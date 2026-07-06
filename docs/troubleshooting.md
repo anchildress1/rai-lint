@@ -216,8 +216,12 @@ git commit -s -m "..."          # new commit
 git commit --amend -s --no-edit # fix the last one
 ```
 
-**Opt out**: drop `'rai-signed-off-by'` from your commitlint rules, or set
-`ignore=rai-signed-off-by` in `.gitlint` for the Python side.
+**Opt out**: drop `'rai-signed-off-by'` from your commitlint rules, or for the Python side add to `.gitlint`:
+
+```ini
+[general]
+ignore=rai-signed-off-by
+```
 
 ---
 
