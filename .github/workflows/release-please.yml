@@ -58,6 +58,9 @@ jobs:
       - name: Run Node tests
         run: npm --workspace=packages/node-commitlint test
 
+      - name: Build Node package
+        run: npm --workspace=packages/node-commitlint run build
+
       - name: Zip Node test results
         run: |
           set -euo pipefail
@@ -87,6 +90,10 @@ jobs:
       - name: Run Python tests with coverage
         working-directory: packages/python-gitlint
         run: uv run --frozen --no-build --no-sync pytest --cov --cov-report=term --cov-report=xml
+
+      - name: Build Python package
+        working-directory: packages/python-gitlint
+        run: uv build
 
       - name: Zip Python test results
         working-directory: packages/python-gitlint
