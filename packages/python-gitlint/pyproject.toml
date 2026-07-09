@@ -16,7 +16,7 @@ dependencies = ["gitlint>=0.19.1"]
 license = "LicenseRef-PolyForm-Shield-1.0.0"
 license-files = ["LICENSE"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
@@ -36,8 +36,6 @@ version = {attr = "gitlint_rai.version.__version__"}
 Homepage = "https://github.com/anchildress1/rai-lint"
 Repository = "https://github.com/anchildress1/rai-lint"
 Issues = "https://github.com/anchildress1/rai-lint/issues"
-
-[project.optional-dependencies]
 
 [dependency-groups]
 dev = [
