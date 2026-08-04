@@ -1,6 +1,6 @@
 {
   "name": "commitlint-plugin-rai",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "Commitlint plugin for RAI footer validation",
   "type": "module",
   "main": "./dist/index.js",
