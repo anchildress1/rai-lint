@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v1.0.2...gitlint-rai-v1.0.3) (2026-09-13)
+
+
+### Bug Fixes
+
+* Close open Dependabot alerts and refresh dependencies ([#135](https://github.com/anchildress1/rai-lint/issues/135)) ([867ca50](https://github.com/anchildress1/rai-lint/commit/867ca50285d91407314f13386f9a5d83e3ba1585))
+
 ## [1.0.2](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v1.0.1...gitlint-rai-v1.0.2) (2026-07-31)
 
 
