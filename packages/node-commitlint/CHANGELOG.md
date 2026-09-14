@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v1.0.2...commitlint-plugin-rai-v1.0.3) (2026-09-13)
+
+
+### Miscellaneous Chores
+
+* **commitlint-plugin-rai:** Synchronize rai-lint versions
+
 ## [1.0.2](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v1.0.1...commitlint-plugin-rai-v1.0.2) (2026-07-31)
 
 
