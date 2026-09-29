@@ -25,67 +25,99 @@ def load_data(json_file):
         print(f"Error reading {json_file}: {e}", file=sys.stderr)
         sys.exit(1)
 
-def check_licenses(data, allowed):
-    bad = []
+def _component_license(component):
+    licenses = []
+    for entry in component.get('licenses', []):
+        if not isinstance(entry, dict):
+            continue
+        license_info = entry.get('license') or {}
+        value = entry.get('expression') or license_info.get('id') or license_info.get('name')
+        if value:
+            licenses.append(value)
+    if len(licenses) == 1:
+        return licenses[0]
+    return licenses or None
+
+
+def _license_entries(data):
     if isinstance(data, list):
-        # Python format: list of dicts
         for item in data:
-            name = item.get('Name')
-            lic = item.get('License')
-            if not license_allowed(lic, allowed):
-                bad.append((name, lic))
+            yield item.get('Name'), item.get('License')
+    elif isinstance(data, dict) and 'components' in data:
+        for component in data['components']:
+            yield component.get('name'), _component_license(component)
     elif isinstance(data, dict):
-        # Check for CycloneDX SBOM format
-        if 'components' in data:
-            for component in data['components']:
-                name = component.get('name')
-                lic_entries = component.get('licenses', [])
-                # Extract license names/ids from nested structure
-                lics = []
-                for l in lic_entries:
-                    if isinstance(l, dict):
-                        lic_obj = l.get('license', {})
-                        lic_id = lic_obj.get('id') or lic_obj.get('name')
-                        if lic_id:
-                            lics.append(lic_id)
-                lic = lics[0] if len(lics) == 1 else lics if lics else None
-                if not license_allowed(lic, allowed):
-                    bad.append((name, lic))
-        else:
-            # Node format: dict of dicts
-            for pkg, info in data.items():
-                lic = info.get('licenses')
-                if not license_allowed(lic, allowed):
-                    bad.append((pkg, lic))
+        for package, info in data.items():
+            yield package, info.get('licenses')
     else:
         print("Unknown JSON format", file=sys.stderr)
         sys.exit(1)
-    return bad
+
+
+def check_licenses(data, allowed):
+    return [(name, lic) for name, lic in _license_entries(data) if not license_allowed(lic, allowed)]
+
+
+class LicenseExpression:
+    def __init__(self, expression, allowed):
+        self.tokens = re.findall(r"\(|\)|[A-Za-z0-9.-]+", expression)
+        self.valid_tokens = bool(self.tokens) and "".join(self.tokens).lower() == re.sub(
+            r"\s+", "", expression
+        ).lower()
+        self.allowed_ids = {item.lower() for item in allowed if item}
+        self.position = 0
+
+    def is_allowed(self):
+        if not self.valid_tokens:
+            return False
+        try:
+            result = self._or()
+        except ValueError:
+            return False
+        return result and self.position == len(self.tokens)
+
+    def _or(self):
+        result = self._and()
+        while self._current() == 'OR':
+            self.position += 1
+            next_result = self._and()
+            result = result or next_result
+        return result
+
+    def _and(self):
+        result = self._atom()
+        while self._current() == 'AND':
+            self.position += 1
+            next_result = self._atom()
+            result = result and next_result
+        return result
+
+    def _atom(self):
+        token = self._current()
+        if token is None or token in {'AND', 'OR', ')'}:
+            raise ValueError('expected license')
+        self.position += 1
+        if token == '(':
+            result = self._or()
+            if self._current() != ')':
+                raise ValueError('unclosed license group')
+            self.position += 1
+            return result
+        return token.lower() in self.allowed_ids
+
+    def _current(self):
+        if self.position < len(self.tokens):
+            return self.tokens[self.position].upper()
+        return None
 
 
 def license_allowed(lic, allowed):
-    """Return True if license value `lic` matches an allowed id exactly.
-
-    - `lic` can be None, a string, or a list/iterable.
-    - `allowed` is a set of allowed identifiers (case-insensitive).
-    - Matching is whole-token only: substring matches like 'mit' in
-      'limited' passed the old check, and UNKNOWN fails closed.
-    """
+    """Accept a license value only when a permitted choice satisfies every required license."""
     if lic is None:
         return False
-
-    allowed_lc = {a.lower() for a in allowed if a}
-
     if isinstance(lic, (list, tuple)):
-        items = [str(x).lower() for x in lic if x]
-    else:
-        items = [str(lic).lower()]
-
-    for item in items:
-        tokens = re.split(r"[^a-z0-9.-]+", item)
-        if any(a in tokens for a in allowed_lc):
-            return True
-    return False
+        return any(license_allowed(item, allowed) for item in lic)
+    return LicenseExpression(str(lic).strip(), allowed).is_allowed()
 
 def main():
     if len(sys.argv) != 2:
