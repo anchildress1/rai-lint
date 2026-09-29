@@ -19,6 +19,8 @@ const AI_ATTRIBUTION_PATTERN = new RegExp(
   'i',
 );
 
+const SCISSORS_MARKER = /^[^\r\n] ------------------------ >8 ------------------------\r?$/m;
+
 const VIOLATION_MESSAGE =
   'Commit message must include AI attribution footer:\n' +
   '  1. "Authored-by: [Human] <contact>" - Human only, no AI\n' +
@@ -35,7 +37,9 @@ const VIOLATION_MESSAGE =
   '  - "Generated-by: GitHub Copilot <copilot@github.com>"';
 
 const raiFooterExists: Rule = (parsed) => {
-  const hasValidFooter = AI_ATTRIBUTION_PATTERN.test(parsed.raw ?? '');
+  const message = parsed.raw ?? '';
+  const marker = message.search(SCISSORS_MARKER);
+  const hasValidFooter = AI_ATTRIBUTION_PATTERN.test(marker === -1 ? message : message.slice(0, marker));
   return hasValidFooter ? [true, ''] : [false, VIOLATION_MESSAGE];
 };
 

@@ -1,6 +1,7 @@
 import lint from '@commitlint/lint';
 import { RuleConfigSeverity } from '@commitlint/types';
 import { describe, it, expect } from 'vitest';
+import repositoryConfig from '../../../commitlint.config.js';
 import plugin from '../src/index';
 
 // Runs the rules through the real commitlint pipeline so a broken export
@@ -43,4 +44,29 @@ describe('commitlint integration', () => {
     expect(result.errors[0].name).toBe('rai-signed-off-by');
     expect(result.errors[0].message).toContain('Signed-off-by');
   });
+
+  it('rejects both footers when they appear only after Git scissors', async () => {
+    const result = await lintMessage(
+      'feat: add a thing\n\n# ------------------------ >8 ------------------------\nGenerated-by: AI <ai@example.com>\nSigned-off-by: Jane Doe <jane@example.com>',
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors.map((error) => error.name)).toEqual([
+      'rai-footer-exists',
+      'rai-signed-off-by',
+    ]);
+  });
+
+  it('rejects a forged Dependabot message under the repository policy', async () => {
+    const result = await lint(
+      'build(deps): bump example\n\nSigned-off-by: dependabot[bot] <support@github.com>',
+      repositoryConfig.rules,
+      {
+        ignores: repositoryConfig.ignores,
+        plugins: { 'commitlint-plugin-rai': plugin },
+      },
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors.some((error) => error.name === 'rai-footer-exists')).toBe(true);
+  });
+
 });

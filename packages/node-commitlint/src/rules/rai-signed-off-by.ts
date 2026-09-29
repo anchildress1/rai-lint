@@ -5,6 +5,8 @@ import type { Rule } from '@commitlint/types';
 const SIGNED_OFF_BY_PATTERN =
   /(?:^|\n)Signed-off-by:[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)/i;
 
+const SCISSORS_MARKER = /^[^\r\n] ------------------------ >8 ------------------------\r?$/m;
+
 const VIOLATION_MESSAGE =
   'Commit message must include a Signed-off-by footer:\n' +
   '  "Signed-off-by: Your Name <your.email@example.com>"\n' +
@@ -14,7 +16,9 @@ const VIOLATION_MESSAGE =
   '`git commit -s` (or `--signoff`).';
 
 const raiSignedOffBy: Rule = (parsed) => {
-  const hasSignOff = SIGNED_OFF_BY_PATTERN.test(parsed.raw ?? '');
+  const message = parsed.raw ?? '';
+  const marker = message.search(SCISSORS_MARKER);
+  const hasSignOff = SIGNED_OFF_BY_PATTERN.test(marker === -1 ? message : message.slice(0, marker));
   return hasSignOff ? [true, ''] : [false, VIOLATION_MESSAGE];
 };
 

@@ -24,6 +24,20 @@ describe('rai-signed-off-by', () => {
     expect(isValid).toBe(true);
   });
 
+  it('rejects sign-off only after a Git scissors marker', () => {
+    const [isValid] = validate(
+      'feat: add feature\n\n# ------------------------ >8 ------------------------\nSigned-off-by: Jane Doe <jane@example.com>',
+    );
+    expect(isValid).toBe(false);
+  });
+
+  it('accepts sign-off before a Git scissors marker', () => {
+    const [isValid] = validate(
+      'feat: add feature\n\nSigned-off-by: Jane Doe <jane@example.com>\n# ------------------------ >8 ------------------------\n',
+    );
+    expect(isValid).toBe(true);
+  });
+
   it('should fail without a Signed-off-by footer', () => {
     const [isValid, message] = validate('feat: add feature\n\nSome other footer');
     expect(isValid).toBe(false);

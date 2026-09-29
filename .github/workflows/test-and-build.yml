@@ -20,7 +20,7 @@ jobs:
     name: Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     timeout-minutes: 9
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
     strategy:
@@ -73,7 +73,7 @@ jobs:
     name: Bundle Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
 
@@ -121,7 +121,7 @@ jobs:
     name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     timeout-minutes: 9
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
     strategy:
@@ -188,7 +188,7 @@ jobs:
     name: Commitlint
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
     steps:
@@ -219,7 +219,7 @@ jobs:
     name: Dependency Review
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     permissions:
       contents: read
       pull-requests: write
@@ -250,7 +250,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 9
     needs: [node-tests, python-tests]
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
       pull-requests: write
