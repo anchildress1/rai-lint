@@ -49,13 +49,9 @@ describe('commitlint integration', () => {
     const result = await lint(
       'build(deps): bump example\n\nSigned-off-by: dependabot[bot] <support@github.com>',
       repositoryConfig.rules,
-      {
-        ignores: repositoryConfig.ignores,
-        plugins: { 'commitlint-plugin-rai': plugin },
-      },
+      { plugins: { 'commitlint-plugin-rai': plugin } },
     );
     expect(result.valid).toBe(false);
     expect(result.errors.some((error) => error.name === 'rai-footer-exists')).toBe(true);
   });
-
 });
