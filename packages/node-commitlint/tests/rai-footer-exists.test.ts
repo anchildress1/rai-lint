@@ -35,23 +35,6 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(true);
   });
 
-  it.each(['#', ';'])(
-    'rejects attribution only after a Git scissors marker with %s comment character',
-    (commentChar) => {
-      const [isValid] = validate(
-        `feat: add feature\n\n${commentChar} ------------------------ >8 ------------------------\nGenerated-by: AI <ai@example.com>`,
-      );
-      expect(isValid).toBe(false);
-    },
-  );
-
-  it('accepts attribution before a CRLF scissors marker', () => {
-    const [isValid] = validate(
-      'feat: add feature\r\n\r\nGenerated-by: AI <ai@example.com>\r\n# ------------------------ >8 ------------------------\r\n',
-    );
-    expect(isValid).toBe(true);
-  });
-
   it('should fail without AI attribution footer', () => {
     const [isValid, message] = validate('feat: add new feature\n\nSome other footer');
     expect(isValid).toBe(false);

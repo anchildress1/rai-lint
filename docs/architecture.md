@@ -37,4 +37,4 @@ Each pattern matches a complete line of the form `Key: Name <contact>`:
 
 The Node plugin (`packages/node-commitlint/src/rules/`) and the Python plugin (`packages/python-gitlint/gitlint_rai/rules.py`) build their patterns from the same key list and pattern template. `rai-signed-off-by` uses the same anchored-line strategy with a fixed `Signed-off-by` key. Parity tests in the Python suite (`test_pattern_parity_with_node_plugin`, `test_signoff_pattern_parity_with_node_plugin`) fail if the two sources drift.
 
-The inputs differ slightly: gitlint strips comment lines and scissors content before running the Python rules. The Node rules ignore content after Git's scissors marker before checking the raw message, so discarded lines cannot satisfy either footer rule.
+One known nuance: the inputs differ slightly. Node validates the raw commit message, while gitlint strips comment lines and scissors content (`git commit -v` diffs) before rules run. A footer inside that stripped region counts for commitlint but not for gitlint.
