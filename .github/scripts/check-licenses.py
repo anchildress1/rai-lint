@@ -16,10 +16,15 @@ Supports three formats:
 import json
 import sys
 import re
+from pathlib import Path
 
 def load_data(json_file):
+    path = Path(json_file).resolve()
+    if not path.is_relative_to(Path.cwd().resolve()):
+        print(f"Refusing to read outside the working directory: {json_file}", file=sys.stderr)
+        sys.exit(1)
     try:
-        with open(json_file, 'r') as f:
+        with open(path, 'r') as f:
             return json.load(f)
     except Exception as e:
         print(f"Error reading {json_file}: {e}", file=sys.stderr)
