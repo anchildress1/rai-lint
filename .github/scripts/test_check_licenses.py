@@ -10,7 +10,7 @@ spec = importlib.util.spec_from_file_location(
 check_licenses = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(check_licenses)
 
-ALLOWED = {"MIT", "Apache-2.0", "BSD-3-Clause", "ISC", "LicenseRef-PolyForm-Shield-1.0.0"}
+ALLOWED = {"MIT", "Apache-2.0", "Apache", "BSD-3-Clause", "BSD", "ISC", "LicenseRef-PolyForm-Shield-1.0.0"}
 
 CASES = [
     ("MIT", True),
@@ -28,6 +28,9 @@ CASES = [
     (["GPL-3.0", "MIT"], True),
     # substring matches must not pass: 'mit' in 'limited'
     ("Limited Proprietary License", False),
+    ("License :: OSI Approved :: Apache Software License", True),
+    ("License :: OSI Approved :: BSD License", True),
+    ("License :: OSI Approved :: GNU General Public License v3 (GPLv3)", False),
     ("mitigated-license", False),
     ("GPL-3.0", False),
     # unknown/missing licenses fail closed

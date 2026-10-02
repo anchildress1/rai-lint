@@ -116,13 +116,24 @@ class LicenseExpression:
         return None
 
 
+# cyclonedx-py reports PyPI trove classifiers verbatim; they are not SPDX expressions.
+TROVE_CLASSIFIERS = {
+    'License :: OSI Approved :: Apache Software License': 'Apache',
+    'License :: OSI Approved :: BSD License': 'BSD',
+    'License :: OSI Approved :: ISC License (ISCL)': 'ISC',
+    'License :: OSI Approved :: MIT License': 'MIT',
+    'License :: OSI Approved :: Python Software Foundation License': 'Python',
+}
+
+
 def license_allowed(lic, allowed):
     """Accept a license value only when a permitted choice satisfies every required license."""
     if lic is None:
         return False
     if isinstance(lic, (list, tuple)):
         return any(license_allowed(item, allowed) for item in lic)
-    return LicenseExpression(str(lic).strip(), allowed).is_allowed()
+    value = str(lic).strip()
+    return LicenseExpression(TROVE_CLASSIFIERS.get(value, value), allowed).is_allowed()
 
 def main():
     if len(sys.argv) != 2:
