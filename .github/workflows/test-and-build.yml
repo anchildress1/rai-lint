@@ -230,7 +230,7 @@ jobs:
           fi
 
           if [[ -z "$bot_author" ]]; then
-            npx commitlint --from "origin/$BASE_REF" --to "$HEAD_SHA"
+            node_modules/.bin/commitlint --from "origin/$BASE_REF" --to "$HEAD_SHA"
             exit 0
           fi
 
@@ -238,7 +238,7 @@ jobs:
             jq -r --arg bot "$bot_author" \
               '.[] | select(.author.login != $bot or .commit.verification.verified != true) | .sha' |
             while read -r sha; do
-              git show -s --format=%B "$sha" | npx commitlint
+              git show -s --format=%B "$sha" | node_modules/.bin/commitlint
             done
 
   dependency-review:
