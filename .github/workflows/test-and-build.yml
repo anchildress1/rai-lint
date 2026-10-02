@@ -20,7 +20,7 @@ jobs:
     name: Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     timeout-minutes: 9
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
     strategy:
@@ -73,7 +73,7 @@ jobs:
     name: Bundle Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
 
@@ -121,7 +121,7 @@ jobs:
     name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     timeout-minutes: 9
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
     strategy:
@@ -188,9 +188,10 @@ jobs:
     name: Commitlint
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     permissions:
       contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -213,13 +214,38 @@ jobs:
       # origin/<base> scopes the lint to branch-unique commits; base.sha
       # ranges re-lint history merged in from the base branch
       - name: Lint PR commit messages
-        run: npx commitlint --from origin/${{ github.event.pull_request.base.ref }} --to ${{ github.event.pull_request.head.sha }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          bot_author=""
+          if [[ "$PR_AUTHOR" == "dependabot[bot]" ]] || \
+             [[ "$PR_AUTHOR" == "github-actions[bot]" && "$HEAD_REF" == release-please--* ]]; then
+            bot_author="$PR_AUTHOR"
+          fi
+
+          if [[ -z "$bot_author" ]]; then
+            node_modules/.bin/commitlint --from "origin/$BASE_REF" --to "$HEAD_SHA"
+            exit 0
+          fi
+
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" |
+            jq -r --arg bot "$bot_author" \
+              '.[] | select(.author.login != $bot or .commit.verification.verified != true) | .sha' |
+            while read -r sha; do
+              git show -s --format=%B "$sha" | node_modules/.bin/commitlint
+            done
 
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     permissions:
       contents: read
       pull-requests: write
@@ -250,7 +276,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 9
     needs: [node-tests, python-tests]
-    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     permissions:
       contents: read
       pull-requests: write
