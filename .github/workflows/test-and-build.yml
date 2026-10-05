@@ -234,12 +234,14 @@ jobs:
             exit 0
           fi
 
-          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" |
+          # The PR commits API caps at 250 entries, so it only allowlists; the git range decides coverage.
+          verified_bot_shas=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" |
             jq -r --arg bot "$bot_author" \
-              '.[] | select(.author.login != $bot or .commit.verification.verified != true) | .sha' |
-            while read -r sha; do
-              git show -s --format=%B "$sha" | node_modules/.bin/commitlint
-            done
+              '.[] | select(.author.login == $bot and .commit.verification.verified == true) | .sha')
+          git rev-list "origin/$BASE_REF..$HEAD_SHA" | while read -r sha; do
+            grep -qxF "$sha" <<< "$verified_bot_shas" && continue
+            git show -s --format=%B "$sha" | node_modules/.bin/commitlint
+          done
 
   dependency-review:
     name: Dependency Review
