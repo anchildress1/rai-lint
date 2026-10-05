@@ -4,11 +4,6 @@ include CHANGELOG.md
 recursive-include gitlint_rai *.py py.typed
 recursive-include gitlint_rai/sbom *.json
 
-global-exclude *.pyc
-global-exclude __pycache__
-global-exclude .DS_Store
-global-exclude .gitignore
-exclude uv.lock
 prune tests
 prune reports
 prune gitlint_rai.egg-info
