@@ -63,6 +63,8 @@ def check_licenses(data, allowed):
 
 
 class LicenseExpression:
+    """SPDX subset: ids, AND, OR, parentheses; AND binds tighter. WITH, `+`, and anything else fail closed."""
+
     def __init__(self, expression, allowed):
         self.tokens = re.findall(r"\(|\)|[A-Za-z0-9.-]+", expression)
         self.valid_tokens = bool(self.tokens) and "".join(self.tokens).lower() == re.sub(
