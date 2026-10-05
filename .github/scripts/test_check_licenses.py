@@ -28,10 +28,10 @@ CASES = [
     (["GPL-3.0", "MIT"], True),
     # substring matches must not pass: 'mit' in 'limited'
     ("Limited Proprietary License", False),
+    ("mitigated-license", False),
     ("License :: OSI Approved :: Apache Software License", True),
     ("License :: OSI Approved :: BSD License", True),
     ("License :: OSI Approved :: GNU General Public License v3 (GPLv3)", False),
-    ("mitigated-license", False),
     ("GPL-3.0", False),
     # unknown/missing licenses fail closed
     ("UNKNOWN", False),
@@ -50,6 +50,11 @@ def main():
         ({"components": [{"name": "pkg", "licenses": [{"license": {"id": "MIT"}}]}]}, False),
         ({"components": [{"name": "pkg", "licenses": [{"expression": "MIT OR GPL-3.0"}]}]}, False),
         ({"components": [{"name": "pkg", "licenses": [{"expression": "MIT AND GPL-3.0"}]}]}, True),
+        ({"components": [{"name": "pkg", "licenses": [{"license": {"id": "MIT"}}, {"license": {"id": "GPL-3.0"}}]}]}, True),
+        ({"components": [{"name": "pkg", "licenses": [
+            {"license": {"id": "BSD-3-Clause"}},
+            {"license": {"name": "License :: OSI Approved :: BSD License"}},
+        ]}]}, False),
     ]
     for data, want_bad in formats:
         got_bad = bool(check_licenses.check_licenses(data, ALLOWED))

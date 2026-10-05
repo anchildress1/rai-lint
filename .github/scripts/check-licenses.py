@@ -38,10 +38,9 @@ def _component_license(component):
         license_info = entry.get('license') or {}
         value = entry.get('expression') or license_info.get('id') or license_info.get('name')
         if value:
-            licenses.append(value)
-    if len(licenses) == 1:
-        return licenses[0]
-    return licenses or None
+            licenses.append(TROVE_CLASSIFIERS.get(value, value))
+    # Every declared entry applies to the component, so all of them must pass.
+    return ' AND '.join(f'({value})' for value in licenses) or None
 
 
 def _license_entries(data):
