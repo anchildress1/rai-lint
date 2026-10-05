@@ -2,11 +2,13 @@
 """Regression tests for check-licenses.py. Run: python3 test_check_licenses.py"""
 
 import importlib.util
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
-spec = importlib.util.spec_from_file_location(
-    "check_licenses", Path(__file__).parent / "check-licenses.py"
-)
+SCRIPT = Path(__file__).parent / "check-licenses.py"
+spec = importlib.util.spec_from_file_location("check_licenses", SCRIPT)
 check_licenses = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(check_licenses)
 
@@ -59,7 +61,17 @@ def main():
     for data, want_bad in formats:
         got_bad = bool(check_licenses.check_licenses(data, ALLOWED))
         assert got_bad == want_bad, f"check_licenses({data!r}) bad={got_bad}, expected {want_bad}"
-    print(f"ok - {len(CASES) + len(formats)} license checker cases pass")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "licenses.json").write_text('{"pkg": {"licenses": "MIT"}}')
+        (root / "work").mkdir()
+        for cwd, arg, want_code in [(root, "licenses.json", 0), (root / "work", "../licenses.json", 1)]:
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), arg], cwd=cwd, capture_output=True, text=True
+            )
+            assert result.returncode == want_code, f"{arg} from {cwd}: exit {result.returncode}"
+        assert "outside the working directory" in result.stderr, result.stderr
+    print(f"ok - {len(CASES) + len(formats) + 2} license checker cases pass")
 
 
 if __name__ == "__main__":
