@@ -52,14 +52,14 @@ jobs:
           ignore-unfixed: true
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: SARIF file
           path: results.sarif
           retention-days: 30
 
       - name: "Upload to code-scanning"
-        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        uses: github/codeql-action/upload-sarif@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
         with:
           sarif_file: results.sarif
 
@@ -78,7 +78,7 @@ jobs:
         run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
 
@@ -86,7 +86,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
           python-version: "3.13"
           enable-cache: true
@@ -148,7 +148,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Initialize CodeQL"
-        uses: github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
         with:
           languages: ${{ matrix.language }}
           packs: codeql/actions-queries
@@ -160,4 +160,4 @@ jobs:
           npm run build --if-present
 
       - name: "Perform CodeQL Analysis"
-        uses: github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0

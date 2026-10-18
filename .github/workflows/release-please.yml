@@ -48,7 +48,7 @@ jobs:
         id: node-version
         run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v7.0.0
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
 
@@ -68,7 +68,7 @@ jobs:
           zip -j artifacts/commitlint-test-results.zip packages/node-commitlint/reports/lcov.info packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Upload Node test results zip
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: commitlint-test-results
           path: artifacts/commitlint-test-results.zip
@@ -79,7 +79,7 @@ jobs:
           python-version: "3.13"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
           enable-cache: true
 
@@ -103,7 +103,7 @@ jobs:
           zip -j ../../artifacts/gitlint-test-results.zip reports/coverage.xml reports/junit-py.xml
 
       - name: Upload Python test results zip
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: gitlint-test-results
           path: artifacts/gitlint-test-results.zip
@@ -126,7 +126,7 @@ jobs:
         id: node-version
         run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v7.0.0
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
           registry-url: "https://registry.npmjs.org"
@@ -187,7 +187,7 @@ jobs:
           fi
 
       - name: Download test results
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           name: commitlint-test-results
           path: artifacts
@@ -226,7 +226,7 @@ jobs:
           python-version: "3.13"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
           enable-cache: true
 
@@ -277,7 +277,7 @@ jobs:
           skip-existing: true
 
       - name: Download test results
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           name: gitlint-test-results
           path: artifacts
