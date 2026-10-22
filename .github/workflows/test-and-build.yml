@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
@@ -63,7 +63,7 @@ jobs:
           fail_ci_if_error: true
 
       - name: Upload Node coverage artifacts
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: node-coverage-${{ matrix.node-version }}
           path: packages/node-commitlint/reports
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
 
       - name: Use Node.js 24
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: 24
           cache: "npm"
@@ -136,12 +136,12 @@ jobs:
       - uses: actions/checkout@v7.0.1
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v7.0.0
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
         with:
           enable-cache: true
 
@@ -168,7 +168,7 @@ jobs:
             --cov-report=term-missing
 
       - name: Upload Python coverage artifacts
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: python-coverage-${{ matrix.python-version }}
           path: packages/python-gitlint/reports
@@ -198,7 +198,7 @@ jobs:
           fetch-depth: 0
 
       - name: Use Node.js 24
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: 24
           cache: "npm"
@@ -288,14 +288,14 @@ jobs:
           fetch-depth: 0
 
       - name: Download Node coverage artifacts
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: node-coverage-*
           path: packages/node-commitlint/reports
           merge-multiple: true
 
       - name: Download Python coverage artifacts
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: python-coverage-*
           path: packages/python-gitlint/reports

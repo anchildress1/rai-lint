@@ -17,27 +17,25 @@
     "postinstall": "npx lefthook install"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.2.3",
-    "@commitlint/config-conventional": "^21.0.2",
-    "@eslint-community/eslint-plugin-eslint-comments": "^4.7.2",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
     "@eslint/js": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^8.71.0",
-    "@typescript-eslint/parser": "^8.46.0",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.0",
     "dotenv-cli": "^11.0.0",
-    "eslint": "^10.11.0",
+    "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
-    "globals": "^17.11.0",
-    "lefthook": "^2.1.15",
-    "markdownlint-cli2": "^0.23.3",
-    "prettier": "^3.9.9",
+    "globals": "^17.13.0",
+    "lefthook": "^2.2.2",
+    "markdownlint-cli2": "^0.24.0",
+    "prettier": "^3.9.10",
     "sonar-scanner": "^3.1.0",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.5"
   },
   "overrides": {
-    "js-yaml": "^4.3.2",
-    "markdown-it": "^14.2.0",
     "fast-uri": "^3.1.7",
-    "smol-toml": "^1.7.1"
+    "smol-toml": "^1.9.1"
   },
   "keywords": [
     "commitlint",
@@ -50,6 +48,6 @@
   "author": "Ashley Childress",
   "license": "LicenseRef-PolyForm-Shield-1.0.0",
   "volta": {
-    "node": "24.11.1"
+    "node": "24.22.1"
   }
 }
