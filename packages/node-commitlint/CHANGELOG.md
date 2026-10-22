@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v1.0.3...commitlint-plugin-rai-v1.0.4) (2026-10-22)
+
+
+### Bug Fixes
+
+* Close security scan findings and license checks ([#140](https://github.com/anchildress1/rai-lint/issues/140)) ([afb75fb](https://github.com/anchildress1/rai-lint/commit/afb75fbf3143db876697d2e2056eab31a1c23781))
+
 ## [1.0.3](https://github.com/anchildress1/rai-lint/compare/commitlint-plugin-rai-v1.0.2...commitlint-plugin-rai-v1.0.3) (2026-09-13)
 
 
