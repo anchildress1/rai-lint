@@ -16,22 +16,18 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(true);
   });
 
-  it('should pass with CRLF line endings', () => {
-    const [isValid] = validate('feat: add feature\r\n\r\nGenerated-by: AI <ai@example.com>\r\n');
-    expect(isValid).toBe(true);
-  });
-
-  it('should pass with attribution anywhere in the message', () => {
-    const [isValid] = validate(
+  it.each([
+    ['CRLF line endings', 'feat: add feature\r\n\r\nGenerated-by: AI <ai@example.com>\r\n'],
+    [
+      'attribution anywhere in the message',
       'feat: add feature\n\nGenerated-by: AI <ai@example.com>\n\nMore detail after.',
-    );
-    expect(isValid).toBe(true);
-  });
-
-  it('should pass with attribution among other footers', () => {
-    const [isValid] = validate(
+    ],
+    [
+      'attribution among other footers',
       'feat: add feature\n\nDescription\n\nCloses #123\n\nAssisted-by: GitHub Copilot <copilot@github.com>',
-    );
+    ],
+  ])('should pass with %s', (_label, message) => {
+    const [isValid] = validate(message);
     expect(isValid).toBe(true);
   });
 
