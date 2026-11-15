@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.4](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v1.0.3...gitlint-rai-v1.0.4) (2026-11-15)
+
+
+### Bug Fixes
+
+* Clear security findings and upgrade dependencies ([#155](https://github.com/anchildress1/rai-lint/issues/155)) ([5771704](https://github.com/anchildress1/rai-lint/commit/57717041b97dfe923c1b6309d19bbd234dc9e40e))
+* Close security scan findings and license checks ([#140](https://github.com/anchildress1/rai-lint/issues/140)) ([afb75fb](https://github.com/anchildress1/rai-lint/commit/afb75fbf3143db876697d2e2056eab31a1c23781))
+* Reject commits with more than one RAI footer ([#154](https://github.com/anchildress1/rai-lint/issues/154)) ([0c767aa](https://github.com/anchildress1/rai-lint/commit/0c767aa626163a05481db6ae1288b09a6cb678fe))
+
 ## [1.0.3](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v1.0.2...gitlint-rai-v1.0.3) (2026-09-13)
 
 
