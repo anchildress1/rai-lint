@@ -42,13 +42,13 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Get Node version from Volta
         id: node-version
         run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v7.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
 
@@ -68,13 +68,13 @@ jobs:
           zip -j artifacts/commitlint-test-results.zip packages/node-commitlint/reports/lcov.info packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Upload Node test results zip
-        uses: actions/upload-artifact@v7.0.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: commitlint-test-results
           path: artifacts/commitlint-test-results.zip
           retention-days: 60
 
-      - uses: actions/setup-python@v7.1.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"
 
@@ -103,7 +103,7 @@ jobs:
           zip -j ../../artifacts/gitlint-test-results.zip reports/coverage.xml reports/junit-py.xml
 
       - name: Upload Python test results zip
-        uses: actions/upload-artifact@v7.0.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: gitlint-test-results
           path: artifacts/gitlint-test-results.zip
@@ -120,13 +120,13 @@ jobs:
       attestations: write
 
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Get Node version from Volta
         id: node-version
         run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v7.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
           registry-url: "https://registry.npmjs.org"
@@ -148,7 +148,7 @@ jobs:
 
       - name: Generate build attestation
         id: attest
-        uses: actions/attest-build-provenance@v4.2.2
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: |
             packages/node-commitlint/dist/**/*
@@ -187,7 +187,7 @@ jobs:
           fi
 
       - name: Download test results
-        uses: actions/download-artifact@v8.0.2
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: commitlint-test-results
           path: artifacts
@@ -219,9 +219,9 @@ jobs:
       attestations: write
 
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-python@v7.1.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"
 
@@ -255,7 +255,7 @@ jobs:
 
       - name: Generate build attestation
         id: attest
-        uses: actions/attest-build-provenance@v4.2.2
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: packages/python-gitlint/dist/*
 
@@ -277,7 +277,7 @@ jobs:
           skip-existing: true
 
       - name: Download test results
-        uses: actions/download-artifact@v8.0.2
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: gitlint-test-results
           path: artifacts

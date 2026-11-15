@@ -63,9 +63,9 @@
     "@commitlint/lint": "^21.2.4",
     "@commitlint/types": "^21.2.3",
     "@types/node": "^26.6.6",
-    "@vitest/coverage-v8": "^5.0.5",
+    "@vitest/coverage-v8": "^5.1.0",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   },
   "volta": {
     "node": "24.22.1"
