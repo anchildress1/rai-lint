@@ -94,6 +94,14 @@ class TestCliFromForeignCwd:
         assert "UC2" in result.stderr
         assert "UC1" not in result.stderr
 
+    def test_multiple_footers_report_uc1_only(self, tmp_path):
+        message = VALID_MESSAGE + "Assisted-by: Claude <noreply@anthropic.com>\n"
+        result = run_cli(tmp_path, message)
+        assert result.returncode != 0
+        assert "UC1" in result.stderr
+        assert "found several" in result.stderr
+        assert "UC2" not in result.stderr
+
     def test_valid_footers_pass(self, tmp_path):
         result = run_cli(tmp_path, VALID_MESSAGE)
         assert result.returncode == 0, result.stderr

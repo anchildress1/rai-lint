@@ -2,7 +2,7 @@
 
 ## What This Actually Does
 
-RAI Lint enforces AI attribution in Git commit trailers. No attribution footer = rejected commit. Simple.
+RAI Lint enforces AI attribution in Git commit trailers. Exactly one attribution footer per commit; none or several = rejected commit. Simple.
 
 **Read the full context**: [Did AI Erase Attribution? Your Git History Is Missing a Co-Author](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l)
 
@@ -10,7 +10,7 @@ RAI Lint enforces AI attribution in Git commit trailers. No attribution footer =
 
 ## Valid RAI Footer Formats
 
-Five footer patterns. All case-insensitive. Pick **one** that represents the **majority AI contribution**.
+Five footer patterns. All case-insensitive. Use **exactly one** — the one that represents the **majority AI contribution**.
 
 > [!TIP]
 > The `Signed-off-by` footer is YOUR human stamp confirming you reviewed and take responsibility for the AI attribution. Both plugins enforce it with their own `rai-signed-off-by` rule: `gitlint-rai` enables it by default (rule id `UC2`; opt out with `ignore=rai-signed-off-by` in `.gitlint`), and commitlint enables it via `'rai-signed-off-by': [2, 'always']` in your config.
@@ -252,7 +252,7 @@ stage('Commit Lint') {
 
 ### Footer Not Detected
 
-**Symptoms**: Commit rejected even though footer is present.
+**Symptoms**: Commit rejected even though a footer is present.
 
 **Causes**:
 
@@ -260,6 +260,7 @@ stage('Commit Lint') {
 2. Footer not on its own line
 3. Typo in the footer keyword
 4. Missing angle brackets around email info
+5. A second AI attribution footer (see [found several](troubleshooting.md#commit-message-must-include-exactly-one-ai-attribution-footer-found-several))
 
 **Example**:
 
@@ -275,7 +276,7 @@ stage('Commit Lint') {
 
 **Question**: Can I include multiple RAI footers?
 
-**Answer**: Yes — the rule only checks that at least one valid footer exists. Convention: pick the one that represents the **majority AI contribution**.
+**Answer**: No — a commit carries exactly one. Zero or two-plus valid footers both fail. Pick the one that represents the **majority AI contribution**. `Co-authored-by` is one of the five keys, so it counts toward the one. Squash-merge messages that concatenate several commits carry several footers; trim them to one before merging.
 
 ### Amending Commits
 
@@ -285,7 +286,7 @@ Add Signed-off-by to the previous commit:
 git commit --amend -s --no-edit
 ```
 
-Or if you need to add an AI attribution footer too:
+Or, for a commit with no AI attribution footer yet, add one too:
 
 ```bash
 git commit --amend -s -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"

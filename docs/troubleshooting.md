@@ -193,6 +193,8 @@ ls -la .git/hooks/commit-msg
    "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
+5. **Second AI footer** — keep only one; see [found several](#commit-message-must-include-exactly-one-ai-attribution-footer-found-several)
+
 **Debug it**:
 
 ```bash
@@ -242,6 +244,23 @@ feat: add feature
 
 Generated-by: GitHub Copilot <copilot@github.com>
 Signed-off-by: Jane Doe <jane@example.com>
+```
+
+---
+
+### "Commit message must include exactly one AI attribution footer, found several"
+
+**What happened**: The message has two or more AI attribution footers.
+
+**Fix it**: Keep the one matching the majority AI contribution:
+
+```bash
+# ❌ Wrong
+Assisted-by: GitHub Copilot <copilot@github.com>
+Generated-by: Claude <noreply@anthropic.com>
+
+# ✅ Right
+Generated-by: Claude <noreply@anthropic.com>
 ```
 
 ---

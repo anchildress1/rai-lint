@@ -25,24 +25,38 @@ describe('commitlint integration', () => {
     expect(result.errors).toHaveLength(0);
   });
 
-  it('fails a message without an attribution footer', async () => {
-    const result = await lintMessage(
+  it.each([
+    [
+      'without an attribution footer',
       'feat: add a thing\n\nSigned-off-by: Jane Doe <jane@example.com>',
-    );
+      'rai-footer-exists',
+      'AI attribution footer',
+    ],
+    [
+      'with several attribution footers',
+      'feat: add a thing\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nAssisted-by: Claude <noreply@anthropic.com>\nSigned-off-by: Jane Doe <jane@example.com>',
+      'rai-footer-exists',
+      'found several',
+    ],
+    [
+      'without a sign-off footer',
+      'feat: add a thing\n\nGenerated-by: GitHub Copilot <copilot@github.com>',
+      'rai-signed-off-by',
+      'Signed-off-by',
+    ],
+  ])('fails a message %s with exactly one error', async (_label, message, rule, text) => {
+    const result = await lintMessage(message);
     expect(result.valid).toBe(false);
     expect(result.errors).toHaveLength(1);
-    expect(result.errors[0].name).toBe('rai-footer-exists');
-    expect(result.errors[0].message).toContain('AI attribution footer');
+    expect(result.errors[0].name).toBe(rule);
+    expect(result.errors[0].message).toContain(text);
   });
 
-  it('fails a message without a sign-off footer', async () => {
+  it('passes one attribution footer alongside unrelated trailers', async () => {
     const result = await lintMessage(
-      'feat: add a thing\n\nGenerated-by: GitHub Copilot <copilot@github.com>',
+      'feat: add a thing\n\nReviewed-by: Bob <bob@example.com>\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Jane Doe <jane@example.com>',
     );
-    expect(result.valid).toBe(false);
-    expect(result.errors).toHaveLength(1);
-    expect(result.errors[0].name).toBe('rai-signed-off-by');
-    expect(result.errors[0].message).toContain('Signed-off-by');
+    expect(result.valid).toBe(true);
   });
 
   it('rejects a forged Dependabot message under the repository policy', async () => {

@@ -20,7 +20,7 @@ flowchart TB
 
 Two rules ship in each plugin:
 
-- **`rai-footer-exists`** (gitlint id `UC1`) — requires an AI attribution footer
+- **`rai-footer-exists`** (gitlint id `UC1`) — requires exactly one AI attribution footer
 - **`rai-signed-off-by`** (gitlint id `UC2`) — requires a DCO-style `Signed-off-by` footer, the human stamp over the attribution (`git commit -s`)
 
 ## RAI Footer Validation Logic
@@ -33,7 +33,7 @@ Each pattern matches a complete line of the form `Key: Name <contact>`:
 - Case-insensitive key matching
 - Requires whitespace after the colon, a non-empty name, and whitespace before `<contact>`
 - A footer cannot span multiple lines (CRLF line endings are tolerated)
-- A matching line anywhere in the message satisfies the rule
+- Exactly one matching line anywhere in the message satisfies the rule; zero or several fail, each with its own message
 
 The Node plugin (`packages/node-commitlint/src/rules/`) and the Python plugin (`packages/python-gitlint/gitlint_rai/rules.py`) build their patterns from the same key list and pattern template. `rai-signed-off-by` uses the same anchored-line strategy with a fixed `Signed-off-by` key. Parity tests in the Python suite (`test_pattern_parity_with_node_plugin`, `test_signoff_pattern_parity_with_node_plugin`) fail if the two sources drift.
 

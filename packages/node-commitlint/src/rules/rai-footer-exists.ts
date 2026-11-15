@@ -10,17 +10,18 @@ const AI_ATTRIBUTION_KEYS = [
   'Generated-by',
 ];
 
-// Explicit (?:^|\n)/(?:\n|$) anchors and [ \t] classes — JS and Python define
+// Explicit (?:^|\n)/(?=\n|$) anchors and [ \t] classes — JS and Python define
 // multiline ^$ and \s differently. Quantified runs are disjoint from the next
-// token, keeping evaluation linear. Must match the Python pattern exactly
+// token, keeping evaluation linear. The trailing newline is a lookahead so
+// adjacent footers stay countable. Must match the Python pattern exactly
 // (test_pattern_parity_with_node_plugin).
 const AI_ATTRIBUTION_PATTERN = new RegExp(
-  String.raw`(?:^|\n)(?:${AI_ATTRIBUTION_KEYS.join('|')}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)`,
-  'i',
+  String.raw`(?:^|\n)(?:${AI_ATTRIBUTION_KEYS.join('|')}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?=\n|$)`,
+  'gi',
 );
 
 const VIOLATION_MESSAGE =
-  'Commit message must include AI attribution footer:\n' +
+  'Commit message must include exactly one AI attribution footer:\n' +
   '  1. "Authored-by: [Human] <contact>" - Human only, no AI\n' +
   '  2. "Commit-generated-by: [AI Tool] <contact>" - Trivial AI (docs, commit msg, advice)\n' +
   '  3. "Assisted-by: [AI Tool] <contact>" - AI helped, but primarily human code\n' +
@@ -34,9 +35,15 @@ const VIOLATION_MESSAGE =
   '  - "Co-authored-by: Verdent AI <verdent@verdent.ai>"\n' +
   '  - "Generated-by: GitHub Copilot <copilot@github.com>"';
 
+const MULTIPLE_FOOTERS_MESSAGE =
+  'Commit message must include exactly one AI attribution footer, found several. ' +
+  'Keep the one matching the majority AI contribution.';
+
 const raiFooterExists: Rule = (parsed) => {
-  const hasValidFooter = AI_ATTRIBUTION_PATTERN.test(parsed.raw ?? '');
-  return hasValidFooter ? [true, ''] : [false, VIOLATION_MESSAGE];
+  const count = (parsed.raw ?? '').match(AI_ATTRIBUTION_PATTERN)?.length ?? 0;
+  if (count === 0) return [false, VIOLATION_MESSAGE];
+  if (count > 1) return [false, MULTIPLE_FOOTERS_MESSAGE];
+  return [true, ''];
 };
 
 export default raiFooterExists;

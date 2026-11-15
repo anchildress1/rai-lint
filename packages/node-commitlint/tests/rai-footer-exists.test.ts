@@ -16,23 +16,57 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(true);
   });
 
-  it('should pass with CRLF line endings', () => {
-    const [isValid] = validate('feat: add feature\r\n\r\nGenerated-by: AI <ai@example.com>\r\n');
-    expect(isValid).toBe(true);
-  });
-
-  it('should pass with attribution anywhere in the message', () => {
-    const [isValid] = validate(
+  it.each([
+    ['CRLF line endings', 'feat: add feature\r\n\r\nGenerated-by: AI <ai@example.com>\r\n'],
+    [
+      'attribution anywhere in the message',
       'feat: add feature\n\nGenerated-by: AI <ai@example.com>\n\nMore detail after.',
+    ],
+    [
+      'attribution among other footers',
+      'feat: add feature\n\nDescription\n\nCloses #123\n\nAssisted-by: GitHub Copilot <copilot@github.com>',
+    ],
+  ])('should pass with %s', (_label, message) => {
+    const [isValid] = validate(message);
+    expect(isValid).toBe(true);
+  });
+
+  it.each([
+    ['different keys', 'Assisted-by: A <a@example.com>\nGenerated-by: B <b@example.com>'],
+    ['the same key', 'Generated-by: A <a@example.com>\nGenerated-by: A <a@example.com>'],
+    ['separated lines', 'Generated-by: A <a@example.com>\n\nbody\n\nAuthored-by: B <b@example.com>'],
+    ['CRLF endings', 'Generated-by: A <a@example.com>\r\nAssisted-by: B <b@example.com>\r\n'],
+  ])('should reject multiple footers: %s', (_label, footers) => {
+    const [isValid, message] = validate(`feat: add feature\n\n${footers}`);
+    expect(isValid).toBe(false);
+    expect(message).toContain('exactly one');
+    expect(message).toContain('found several');
+  });
+
+  it.each([
+    ['mixed-case keys', 'generated-by: A <a@example.com>\nGENERATED-BY: A <a@example.com>'],
+    ['two Co-authored-by', 'Co-authored-by: A <a@example.com>\nCo-authored-by: B <b@example.com>'],
+    [
+      'three footers',
+      'Authored-by: A <a@example.com>\nAssisted-by: B <b@example.com>\nGenerated-by: C <c@example.com>',
+    ],
+  ])('should reject multiple footers: %s', (_label, footers) => {
+    const [isValid, message] = validate(`feat: add feature\n\n${footers}`);
+    expect(isValid).toBe(false);
+    expect(message).toContain('found several');
+  });
+
+  it('should not count a malformed second footer', () => {
+    const [isValid] = validate(
+      'feat: add feature\n\nGenerated-by: A <a@example.com>\nAssisted-by: No Email',
     );
     expect(isValid).toBe(true);
   });
 
-  it('should pass with attribution among other footers', () => {
-    const [isValid] = validate(
-      'feat: add feature\n\nDescription\n\nCloses #123\n\nAssisted-by: GitHub Copilot <copilot@github.com>',
-    );
-    expect(isValid).toBe(true);
+  it('should be stateless across repeated calls', () => {
+    const raw = 'feat: add feature\n\nGenerated-by: AI <ai@example.com>';
+    expect(validate(raw)[0]).toBe(true);
+    expect(validate(raw)[0]).toBe(true);
   });
 
   it('should fail without AI attribution footer', () => {

@@ -59,7 +59,7 @@ RAI Lint enforces **Responsible AI (RAI) attribution** in every commit. No more 
 ```mermaid
 %%{init: {'theme':'dark'}}%%
 flowchart LR
-    A[Developer Commits] --> B{Has AI Footer?}
+    A[Developer Commits] --> B{Exactly one AI Footer?}
     B -->|Yes| C[Commit Accepted ✅]
     B -->|No| D[Commit Rejected ❌]
     C --> E[Clear AI Attribution]
@@ -80,7 +80,7 @@ Because transparency matters. When AI writes code, everyone should know. This is
 
 ### 🔒 **Enforcement by Default**
 
-Blocks commits without valid AI attribution footers. No exceptions.
+Requires exactly one valid AI attribution footer on every commit. No exceptions.
 
 ### 🌍 **Dual-Language Support**
 
@@ -107,14 +107,14 @@ Works out-of-the-box with sensible defaults. Customize when ready.
 
 Every commit **must** include:
 
-1. **One AI attribution footer** (pick the one that fits)
+1. **Exactly one AI attribution footer** (pick the one that fits)
 2. **Signed-off-by footer** (your human accountability stamp — `git commit -s`)
 
 > **💡 Complete audit trail:** AI attribution plus human accountability. `gitlint-rai` enforces both out of the box; for commitlint, enable the plugin's `rai-signed-off-by` rule alongside `rai-footer-exists`.
 
 ### AI Attribution Footers
 
-Pick **one** of these based on AI involvement:
+Pick **exactly one** of these based on AI involvement:
 
 <table>
 <thead>

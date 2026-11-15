@@ -24,7 +24,7 @@ When asked to **rewrite** `CHANGELOG.md` (or draft release notes), optimize for 
 
 ## AI Attribution Footer
 
-When committing changes in this project, I must include one of these five footer formats:
+When committing changes in this project, I must include exactly one of these five footer formats:
 
 1. `Authored-by: [Human] <email>` - When human did all the work, no AI involved
 2. `Commit-generated-by: [AI Tool] <email>` - For trivial AI work (docs, messages, advice only)
@@ -32,7 +32,7 @@ When committing changes in this project, I must include one of these five footer
 4. `Co-authored-by: [AI Tool] <email>` - When AI/human split work 50/50 (40-60 leeway)
 5. `Generated-by: [AI Tool] <email>` - When AI generated the majority of the commit
 
-The commitlint rule enforces this via regex patterns (case-insensitive). All commits without a valid footer are rejected.
+The commitlint rule enforces this via regex patterns (case-insensitive). All commits without exactly one valid footer are rejected.
 
 ## Release Process
 

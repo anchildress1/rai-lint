@@ -43,13 +43,13 @@ export default {
 };
 ```
 
-Once this is in place, commitlint will refuse to proceed until a valid RAI trailer is present — and, with `rai-signed-off-by` enabled, a `Signed-off-by: Your Name <email>` footer too.
+Once this is in place, commitlint will refuse to proceed until exactly one valid RAI trailer is present — and, with `rai-signed-off-by` enabled, a `Signed-off-by: Your Name <email>` footer too.
 
 ## Valid Trailers 📌
 
 Pick the one that matches the **majority AI contribution**.
 Skip it entirely and the commit fails.
-Extra footers are fine — the rule only checks that at least one valid footer exists.
+Exactly one attribution footer per commit — two or more fail the rule. Other footers are fine.
 
 No negotiations.
 

@@ -4,7 +4,7 @@ Thank you for your interest in RAI Lint!
 
 ## AI Attribution Policy
 
-All commits to this repository must include an AI attribution footer using standard Git trailer format:
+All commits to this repository must include exactly one AI attribution footer using standard Git trailer format:
 
 1. **`Authored-by: [Human] <email>`** - Human only, no AI involvement
 2. **`Commit-generated-by: [AI Tool] <email>`** - Trivial AI (docs, commit msg, reviews, advice, etc)
@@ -102,7 +102,7 @@ with two.
 2. Create a feature branch
 3. Make your changes
 4. Run tests and linting
-5. Commit with sign-off (`git commit -s`) and proper RAI footer
+5. Commit with sign-off (`git commit -s`) and exactly one RAI footer
 6. Push to your fork
 7. Open a pull request
 
