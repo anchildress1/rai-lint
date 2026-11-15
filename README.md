@@ -59,7 +59,7 @@ RAI Lint enforces **Responsible AI (RAI) attribution** in every commit. No more 
 ```mermaid
 %%{init: {'theme':'dark'}}%%
 flowchart LR
-    A[Developer Commits] --> B{Has AI Footer?}
+    A[Developer Commits] --> B{Exactly one AI Footer?}
     B -->|Yes| C[Commit Accepted ✅]
     B -->|No| D[Commit Rejected ❌]
     C --> E[Clear AI Attribution]
@@ -80,7 +80,7 @@ Because transparency matters. When AI writes code, everyone should know. This is
 
 ### 🔒 **Enforcement by Default**
 
-Blocks commits without valid AI attribution footers. No exceptions.
+Requires exactly one valid AI attribution footer on every commit. No exceptions.
 
 ### 🌍 **Dual-Language Support**
 

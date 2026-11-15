@@ -88,6 +88,26 @@ class TestRaiFooterExists:
         assert len(violations) == 1
         assert violations[0].message == MULTIPLE_FOOTERS_MESSAGE
 
+    @pytest.mark.parametrize(
+        "footers",
+        [
+            "generated-by: A <a@example.com>\nGENERATED-BY: A <a@example.com>",
+            "Co-authored-by: A <a@example.com>\nCo-authored-by: B <b@example.com>",
+            "Authored-by: A <a@example.com>\nAssisted-by: B <b@example.com>\n"
+            "Generated-by: C <c@example.com>",
+        ],
+    )
+    def test_multiple_footers_variants_rejected(self, rule, footers):
+        commit = create_commit(f"feat: add feature\n\n{footers}")
+        violations = rule.validate(commit)
+        assert [v.message for v in violations] == [MULTIPLE_FOOTERS_MESSAGE]
+
+    def test_malformed_second_footer_not_counted(self, rule):
+        commit = create_commit(
+            "feat: add feature\n\nGenerated-by: A <a@example.com>\nAssisted-by: No Email"
+        )
+        assert rule.validate(commit) == []
+
     def test_generated_by_footer_no_email(self, rule):
         commit = create_commit("feat: add new feature\n\nGenerated-by: GitHub Copilot")
         violations = rule.validate(commit)
@@ -300,7 +320,7 @@ def test_pattern_parity_with_node_plugin():
         r"new RegExp\(\s*String\.raw`\(\?:\^\|\\n\)\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`,\s*'gi',?\s*\)",
         source,
     )
-    assert template, "pattern template with 'i' flag not found in Node plugin source"
+    assert template, "pattern template with 'gi' flags not found in Node plugin source"
     node_suffix = template.group(1)
     python_suffix = AI_ATTRIBUTION_PATTERN.pattern.split(")", 2)[2]
     assert node_suffix == python_suffix

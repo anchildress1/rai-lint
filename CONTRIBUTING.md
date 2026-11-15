@@ -102,7 +102,7 @@ with two.
 2. Create a feature branch
 3. Make your changes
 4. Run tests and linting
-5. Commit with sign-off (`git commit -s`) and proper RAI footer
+5. Commit with sign-off (`git commit -s`) and exactly one RAI footer
 6. Push to your fork
 7. Open a pull request
 

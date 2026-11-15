@@ -35,6 +35,23 @@ describe('commitlint integration', () => {
     expect(result.errors[0].message).toContain('AI attribution footer');
   });
 
+  it('fails a message with several attribution footers and leaves sign-off alone', async () => {
+    const result = await lintMessage(
+      'feat: add a thing\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nAssisted-by: Claude <noreply@anthropic.com>\nSigned-off-by: Jane Doe <jane@example.com>',
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0].name).toBe('rai-footer-exists');
+    expect(result.errors[0].message).toContain('found several');
+  });
+
+  it('passes one attribution footer alongside unrelated trailers', async () => {
+    const result = await lintMessage(
+      'feat: add a thing\n\nReviewed-by: Bob <bob@example.com>\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Jane Doe <jane@example.com>',
+    );
+    expect(result.valid).toBe(true);
+  });
+
   it('fails a message without a sign-off footer', async () => {
     const result = await lintMessage(
       'feat: add a thing\n\nGenerated-by: GitHub Copilot <copilot@github.com>',

@@ -10,7 +10,7 @@ const AI_ATTRIBUTION_KEYS = [
   'Generated-by',
 ];
 
-// Explicit (?:^|\n)/(?:\n|$) anchors and [ \t] classes — JS and Python define
+// Explicit (?:^|\n)/(?=\n|$) anchors and [ \t] classes — JS and Python define
 // multiline ^$ and \s differently. Quantified runs are disjoint from the next
 // token, keeping evaluation linear. The trailing newline is a lookahead so
 // adjacent footers stay countable. Must match the Python pattern exactly

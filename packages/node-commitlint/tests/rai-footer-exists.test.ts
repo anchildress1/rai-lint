@@ -47,6 +47,26 @@ describe('rai-footer-exists', () => {
     expect(message).toContain('found several');
   });
 
+  it.each([
+    ['mixed-case keys', 'generated-by: A <a@example.com>\nGENERATED-BY: A <a@example.com>'],
+    ['two Co-authored-by', 'Co-authored-by: A <a@example.com>\nCo-authored-by: B <b@example.com>'],
+    [
+      'three footers',
+      'Authored-by: A <a@example.com>\nAssisted-by: B <b@example.com>\nGenerated-by: C <c@example.com>',
+    ],
+  ])('should reject multiple footers: %s', (_label, footers) => {
+    const [isValid, message] = validate(`feat: add feature\n\n${footers}`);
+    expect(isValid).toBe(false);
+    expect(message).toContain('found several');
+  });
+
+  it('should not count a malformed second footer', () => {
+    const [isValid] = validate(
+      'feat: add feature\n\nGenerated-by: A <a@example.com>\nAssisted-by: No Email',
+    );
+    expect(isValid).toBe(true);
+  });
+
   it('should be stateless across repeated calls', () => {
     const raw = 'feat: add feature\n\nGenerated-by: AI <ai@example.com>';
     expect(validate(raw)[0]).toBe(true);
