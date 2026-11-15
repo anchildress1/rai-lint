@@ -54,9 +54,9 @@ dev = [
 # gates that the override stays compatible. User installs are unaffected —
 # published metadata still defers to gitlint's own pins.
 [tool.uv]
-override-dependencies = ["sh>=2.0 ; sys_platform != 'win32'"]
 # wait out newly published versions before resolving them
 exclude-newer = "7 days"
+override-dependencies = ["sh>=2.0 ; sys_platform != 'win32'"]
 
 [tool.setuptools.packages.find]
 where = ["."]

@@ -246,6 +246,23 @@ Signed-off-by: Jane Doe <jane@example.com>
 
 ---
 
+### "found several"
+
+**What happened**: The message has two or more AI attribution footers.
+
+**Fix it**: Keep the one matching the majority AI contribution:
+
+```bash
+# ❌ Wrong
+Assisted-by: GitHub Copilot <copilot@github.com>
+Generated-by: Claude <noreply@anthropic.com>
+
+# ✅ Right
+Generated-by: Claude <noreply@anthropic.com>
+```
+
+---
+
 ## CI/CD Issues
 
 ### GitHub Actions failing on commitlint

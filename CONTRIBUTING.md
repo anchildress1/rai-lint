@@ -4,7 +4,7 @@ Thank you for your interest in RAI Lint!
 
 ## AI Attribution Policy
 
-All commits to this repository must include an AI attribution footer using standard Git trailer format:
+All commits to this repository must include exactly one AI attribution footer using standard Git trailer format:
 
 1. **`Authored-by: [Human] <email>`** - Human only, no AI involvement
 2. **`Commit-generated-by: [AI Tool] <email>`** - Trivial AI (docs, commit msg, reviews, advice, etc)

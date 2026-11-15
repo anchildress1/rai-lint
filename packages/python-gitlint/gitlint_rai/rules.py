@@ -14,15 +14,16 @@ AI_ATTRIBUTION_KEYS = [
 
 # Explicit (?:^|\n)/(?:\n|$) anchors and [ \t] classes — JS and Python define
 # multiline ^$ and \s differently. Quantified runs are disjoint from the next
-# token, keeping evaluation linear. Must match the Node pattern exactly
+# token, keeping evaluation linear. The trailing newline is a lookahead so
+# adjacent footers stay countable. Must match the Node pattern exactly
 # (test_pattern_parity_with_node_plugin).
 AI_ATTRIBUTION_PATTERN = re.compile(
-    rf"(?:^|\n)(?:{'|'.join(AI_ATTRIBUTION_KEYS)}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?:\n|$)",
+    rf"(?:^|\n)(?:{'|'.join(AI_ATTRIBUTION_KEYS)}):[ \t]+[^ \t<\r\n][^<\r\n]*(?<=[ \t])<[^>\r\n]+>\r?(?=\n|$)",
     re.IGNORECASE,
 )
 
 VIOLATION_MESSAGE = (
-    "Commit message must include AI attribution footer:\n"
+    "Commit message must include exactly one AI attribution footer:\n"
     '  1. "Authored-by: [Human] <contact>" - Human only, no AI\n'
     '  2. "Commit-generated-by: [AI Tool] <contact>" - Trivial AI (docs, commit msg, advice)\n'
     '  3. "Assisted-by: [AI Tool] <contact>" - AI helped, but primarily human code\n'
@@ -37,6 +38,11 @@ VIOLATION_MESSAGE = (
     '  - "Generated-by: GitHub Copilot <copilot@github.com>"'
 )
 
+MULTIPLE_FOOTERS_MESSAGE = (
+    "Commit message must include exactly one AI attribution footer, found several. "
+    "Keep the one matching the majority AI contribution."
+)
+
 
 class RaiFooterExists(CommitRule):
     name = "rai-footer-exists"
@@ -44,9 +50,12 @@ class RaiFooterExists(CommitRule):
     target = "commit"
 
     def validate(self, commit):
-        if AI_ATTRIBUTION_PATTERN.search(commit.message.full or ""):
-            return []
-        return [RuleViolation(self.id, VIOLATION_MESSAGE)]
+        count = len(AI_ATTRIBUTION_PATTERN.findall(commit.message.full or ""))
+        if count == 0:
+            return [RuleViolation(self.id, VIOLATION_MESSAGE)]
+        if count > 1:
+            return [RuleViolation(self.id, MULTIPLE_FOOTERS_MESSAGE)]
+        return []
 
 
 # Same shape and engine-parity constraints as AI_ATTRIBUTION_PATTERN. Must

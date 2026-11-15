@@ -7,6 +7,7 @@ import pytest
 from gitlint_rai.rules import (
     AI_ATTRIBUTION_KEYS,
     AI_ATTRIBUTION_PATTERN,
+    MULTIPLE_FOOTERS_MESSAGE,
     SIGNED_OFF_BY_PATTERN,
     SIGNED_OFF_BY_VIOLATION_MESSAGE,
     VIOLATION_MESSAGE,
@@ -71,6 +72,21 @@ class TestRaiFooterExists:
         )
         violations = rule.validate(commit)
         assert len(violations) == 0
+
+    @pytest.mark.parametrize(
+        "footers",
+        [
+            "Assisted-by: A <a@example.com>\nGenerated-by: B <b@example.com>",
+            "Generated-by: A <a@example.com>\nGenerated-by: A <a@example.com>",
+            "Generated-by: A <a@example.com>\n\nbody\n\nAuthored-by: B <b@example.com>",
+            "Generated-by: A <a@example.com>\r\nAssisted-by: B <b@example.com>\r\n",
+        ],
+    )
+    def test_multiple_footers_rejected(self, rule, footers):
+        commit = create_commit(f"feat: add feature\n\n{footers}")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+        assert violations[0].message == MULTIPLE_FOOTERS_MESSAGE
 
     def test_generated_by_footer_no_email(self, rule):
         commit = create_commit("feat: add new feature\n\nGenerated-by: GitHub Copilot")
@@ -277,11 +293,11 @@ def test_pattern_parity_with_node_plugin():
     node_keys = re.findall(r"'([^']+)'", keys_block.group(1))
     assert node_keys == AI_ATTRIBUTION_KEYS
 
-    # The 'i' flag (and the absence of 'm') is part of the match so flag
+    # The 'gi' flags (and the absence of 'm') are part of the match so flag
     # changes in the Node source fail this test, not just pattern-text edits.
     # String.raw means the template text is the literal pattern — no unescaping.
     template = re.search(
-        r"new RegExp\(\s*String\.raw`\(\?:\^\|\\n\)\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`,\s*'i',?\s*\)",
+        r"new RegExp\(\s*String\.raw`\(\?:\^\|\\n\)\(\?:\$\{AI_ATTRIBUTION_KEYS\.join\('\|'\)\}\)(.*?)`,\s*'gi',?\s*\)",
         source,
     )
     assert template, "pattern template with 'i' flag not found in Node plugin source"
@@ -300,6 +316,10 @@ def test_message_parity_with_node_plugin():
     assert block, "violation message not found in Node plugin source"
     node_message = "".join(re.findall(r"'([^']*)'", block.group(1))).replace("\\n", "\n")
     assert node_message == VIOLATION_MESSAGE
+
+    multiple = re.search(r"const MULTIPLE_FOOTERS_MESSAGE =\n(.*?);", source, re.DOTALL)
+    assert multiple, "multiple-footers message not found in Node plugin source"
+    assert "".join(re.findall(r"'([^']*)'", multiple.group(1))) == MULTIPLE_FOOTERS_MESSAGE
 
 
 def test_signoff_pattern_parity_with_node_plugin():

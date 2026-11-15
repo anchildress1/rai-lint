@@ -107,14 +107,14 @@ Works out-of-the-box with sensible defaults. Customize when ready.
 
 Every commit **must** include:
 
-1. **One AI attribution footer** (pick the one that fits)
+1. **Exactly one AI attribution footer** (pick the one that fits)
 2. **Signed-off-by footer** (your human accountability stamp — `git commit -s`)
 
 > **💡 Complete audit trail:** AI attribution plus human accountability. `gitlint-rai` enforces both out of the box; for commitlint, enable the plugin's `rai-signed-off-by` rule alongside `rai-footer-exists`.
 
 ### AI Attribution Footers
 
-Pick **one** of these based on AI involvement:
+Pick **exactly one** of these based on AI involvement:
 
 <table>
 <thead>

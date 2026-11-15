@@ -35,6 +35,24 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(true);
   });
 
+  it.each([
+    ['different keys', 'Assisted-by: A <a@example.com>\nGenerated-by: B <b@example.com>'],
+    ['the same key', 'Generated-by: A <a@example.com>\nGenerated-by: A <a@example.com>'],
+    ['separated lines', 'Generated-by: A <a@example.com>\n\nbody\n\nAuthored-by: B <b@example.com>'],
+    ['CRLF endings', 'Generated-by: A <a@example.com>\r\nAssisted-by: B <b@example.com>\r\n'],
+  ])('should reject multiple footers: %s', (_label, footers) => {
+    const [isValid, message] = validate(`feat: add feature\n\n${footers}`);
+    expect(isValid).toBe(false);
+    expect(message).toContain('exactly one');
+    expect(message).toContain('found several');
+  });
+
+  it('should be stateless across repeated calls', () => {
+    const raw = 'feat: add feature\n\nGenerated-by: AI <ai@example.com>';
+    expect(validate(raw)[0]).toBe(true);
+    expect(validate(raw)[0]).toBe(true);
+  });
+
   it('should fail without AI attribution footer', () => {
     const [isValid, message] = validate('feat: add new feature\n\nSome other footer');
     expect(isValid).toBe(false);

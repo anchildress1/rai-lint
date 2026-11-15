@@ -63,13 +63,13 @@ gitlint-rai --debug
 
 Look for `rai-footer-exists` and `rai-signed-off-by` in the loaded-rules output. If you see them, the plugin is active and doing its job.
 
-Both rules are enforced by default: `rai-footer-exists` (UC1) requires an AI attribution trailer, and `rai-signed-off-by` (UC2) requires the `Signed-off-by: Your Name <email>` footer that `git commit -s` adds. To skip sign-off enforcement, add `ignore=rai-signed-off-by` under `[general]` in your `.gitlint`.
+Both rules are enforced by default: `rai-footer-exists` (UC1) requires exactly one AI attribution trailer, and `rai-signed-off-by` (UC2) requires the `Signed-off-by: Your Name <email>` footer that `git commit -s` adds. To skip sign-off enforcement, add `ignore=rai-signed-off-by` under `[general]` in your `.gitlint`.
 
 ## Valid Trailers 📌
 
 Pick the one that matches the **majority AI contribution**.
 Skip it entirely and the commit fails.
-Extra footers are fine — the rule only checks that at least one valid footer exists.
+Exactly one attribution footer per commit — two or more fail the rule. Other footers are fine.
 
 This is not a debate.
 
